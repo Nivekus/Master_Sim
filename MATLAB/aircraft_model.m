@@ -10,9 +10,7 @@ function Xdot  = aircraft_model(X,U)
     x7 = X(7);
     x8 = X(8);
     x9 = X(9);
-%     x10 = X(10);
-%     x11 = X(11);
-%     x12 = X(12);
+
 
 
     %INPUTS
@@ -232,22 +230,6 @@ function Xdot  = aircraft_model(X,U)
     x7to9dot = H_phi*wbe_b;
 
 
-
-%     Rpsi = [cos(x9) sin(9) 0;
-%             -sin(x9) cos(x9) 0;
-%             0 0 1];
-%     
-%     Rtheta =[cos(x8) 0 -sin(x8);
-%              0 1 0;
-%              sin(x8) 0 cos(x8)];
-%     
-%     Rphi = [1 0 0;
-%             0 cos(x7) sin(x7);
-%             0 -sin(x7) cos(x7)];
-%             
-%     R = Rphi * Rtheta * Rpsi;
-% 
-%     x10to12dot = R' * V_b;
 
 
     Xdot = [x1to3dot;
