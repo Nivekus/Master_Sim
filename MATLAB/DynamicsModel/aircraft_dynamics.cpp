@@ -3,13 +3,13 @@
 // course requirements at degree granting institutions only.  Not for
 // government, commercial, or other organizational use.
 //
-// aircraft_model.cpp
+// aircraft_dynamics.cpp
 //
-// Code generation for function 'aircraft_model'
+// Code generation for function 'aircraft_dynamics'
 //
 
 // Include files
-#include "aircraft_model.h"
+#include "aircraft_dynamics.h"
 #include "rt_nonfinite.h"
 #include "rt_defines.h"
 #include <cmath>
@@ -98,7 +98,12 @@ static double rt_powd_snf(double u0, double u1)
   return y;
 }
 
-void aircraft_model(const double X[9], const double U[5], double Xdot[9])
+aircraft_dynamics::aircraft_dynamics() = default;
+
+aircraft_dynamics::~aircraft_dynamics() = default;
+
+void aircraft_dynamics::aircraft_model(const double X[9], const double U[5],
+                                       double Xdot[9])
 {
   static const double b[9]{-11.0, 0.0, 1.7, 0.0,  -14.006420569329665,
                            0.0,   5.0, 0.0, -11.5};
@@ -287,4 +292,4 @@ void aircraft_model(const double X[9], const double U[5], double Xdot[9])
   }
 }
 
-// End of code generation (aircraft_model.cpp)
+// End of code generation (aircraft_dynamics.cpp)
