@@ -10,8 +10,7 @@
 #include "../DynamicsModel/rtwtypes.h"
 #include "../DynamicsModel/aircraft_dynamics.h"
 #include "../DynamicsModel/rt_nonfinite.h"
-//#include <boost/numeric/odeint.hpp>
-#include "../../../../../../Program Files (x86)/UE_5.0/Engine/Source/ThirdParty/Boost/boost-1_70_0/include/boost/numeric/odeint.hpp"
+#include <boost/numeric/odeint.hpp>
 #include "Drone.generated.h"
 
 
@@ -30,7 +29,9 @@ public:
 	aircraft_dynamics dynamics();
 	double U[9];
 	double X[5];
-	double startpose[3];
+
+	UPROPERTY()
+		double startpose [3] = {0,0,1000};
 
 protected:
 	// Called when the game starts or when spawned
@@ -44,15 +45,11 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable)
-	void setU(double u0, double u1, double u2, double u3, double u4);
+	void setU(double u1, double u2, double u3, double u4, double u5);
 
 	UFUNCTION(BlueprintCallable)
-	void setX0(double x0, double x1,double x2, double x3, double x4, double x5, double x6, double x7, double x8);
+	void setX0(double u1, double u2, double u3, double u4, double u5);
 
-	UFUNCTION(BlueprintCallable)
-	void setInitpose(double x, double y, double z);
 
-	UFUNCTION(BlueprintCallable)
-	void calc_step();
-	
+
 };
