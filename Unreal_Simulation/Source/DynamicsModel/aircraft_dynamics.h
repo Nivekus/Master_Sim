@@ -21,7 +21,7 @@ class aircraft_dynamics {
 public:
   aircraft_dynamics();
   ~aircraft_dynamics();
-  void aircraft_model(const double X[9], const double U[5], double Xdot[9]);
+  void aircraft_model( double X[9],  double U[5], double Xdot[9]) const;
 };
 
 #endif

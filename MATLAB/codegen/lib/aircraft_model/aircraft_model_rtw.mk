@@ -2,7 +2,7 @@
 ## Makefile generated for component 'aircraft_model'. 
 ## 
 ## Makefile     : aircraft_model_rtw.mk
-## Generated on : Fri Aug 19 09:24:02 2022
+## Generated on : Wed Aug 24 13:20:10 2022
 ## Final product: .\aircraft_model.lib
 ## Product type : static-library
 ## 
@@ -182,7 +182,7 @@ DEFINES = $(DEFINES_CUSTOM) $(DEFINES_STANDARD)
 ## SOURCE FILES
 ###########################################################################
 
-SRCS = $(START_DIR)\codegen\lib\aircraft_model\aircraft_model_data.cpp $(START_DIR)\codegen\lib\aircraft_model\rt_nonfinite.cpp $(START_DIR)\codegen\lib\aircraft_model\rtGetNaN.cpp $(START_DIR)\codegen\lib\aircraft_model\rtGetInf.cpp $(START_DIR)\codegen\lib\aircraft_model\aircraft_model_initialize.cpp $(START_DIR)\codegen\lib\aircraft_model\aircraft_model_terminate.cpp $(START_DIR)\codegen\lib\aircraft_model\aircraft_model.cpp
+SRCS = $(START_DIR)\codegen\lib\aircraft_model\aircraft_model_data.cpp $(START_DIR)\codegen\lib\aircraft_model\rt_nonfinite.cpp $(START_DIR)\codegen\lib\aircraft_model\rtGetNaN.cpp $(START_DIR)\codegen\lib\aircraft_model\rtGetInf.cpp $(START_DIR)\codegen\lib\aircraft_model\aircraft_dynamics.cpp
 
 ALL_SRCS = $(SRCS)
 
@@ -190,7 +190,7 @@ ALL_SRCS = $(SRCS)
 ## OBJECTS
 ###########################################################################
 
-OBJS = aircraft_model_data.obj rt_nonfinite.obj rtGetNaN.obj rtGetInf.obj aircraft_model_initialize.obj aircraft_model_terminate.obj aircraft_model.obj
+OBJS = aircraft_model_data.obj rt_nonfinite.obj rtGetNaN.obj rtGetInf.obj aircraft_dynamics.obj
 
 ALL_OBJS = $(OBJS)
 
@@ -316,11 +316,11 @@ $(PRODUCT) : $(OBJS) $(PREBUILT_OBJS)
 	$(CPP) $(CPPFLAGS) -Fo"$@" "$<"
 
 
-{$(START_DIR)\Test}.c.obj :
+{$(START_DIR)}.c.obj :
 	$(CC) $(CFLAGS) -Fo"$@" "$<"
 
 
-{$(START_DIR)\Test}.cpp.obj :
+{$(START_DIR)}.cpp.obj :
 	$(CPP) $(CPPFLAGS) -Fo"$@" "$<"
 
 
@@ -340,16 +340,8 @@ rtGetInf.obj : "$(START_DIR)\codegen\lib\aircraft_model\rtGetInf.cpp"
 	$(CPP) $(CPPFLAGS) -Fo"$@" "$(START_DIR)\codegen\lib\aircraft_model\rtGetInf.cpp"
 
 
-aircraft_model_initialize.obj : "$(START_DIR)\codegen\lib\aircraft_model\aircraft_model_initialize.cpp"
-	$(CPP) $(CPPFLAGS) -Fo"$@" "$(START_DIR)\codegen\lib\aircraft_model\aircraft_model_initialize.cpp"
-
-
-aircraft_model_terminate.obj : "$(START_DIR)\codegen\lib\aircraft_model\aircraft_model_terminate.cpp"
-	$(CPP) $(CPPFLAGS) -Fo"$@" "$(START_DIR)\codegen\lib\aircraft_model\aircraft_model_terminate.cpp"
-
-
-aircraft_model.obj : "$(START_DIR)\codegen\lib\aircraft_model\aircraft_model.cpp"
-	$(CPP) $(CPPFLAGS) -Fo"$@" "$(START_DIR)\codegen\lib\aircraft_model\aircraft_model.cpp"
+aircraft_dynamics.obj : "$(START_DIR)\codegen\lib\aircraft_model\aircraft_dynamics.cpp"
+	$(CPP) $(CPPFLAGS) -Fo"$@" "$(START_DIR)\codegen\lib\aircraft_model\aircraft_dynamics.cpp"
 
 
 ###########################################################################

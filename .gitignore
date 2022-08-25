@@ -72,3 +72,8 @@ Unreal_Simulation/Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 Unreal_Simulation/DerivedDataCache/*
+
+# automated matlab code generation
+MATLAB/slprj/*
+MATLAB/codegen/*
+MATLAB/modelsim_grt_rtw/*

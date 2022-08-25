@@ -35,8 +35,7 @@
 
 // Include files
 #include "main.h"
-#include "aircraft_model.h"
-#include "aircraft_model_terminate.h"
+#include "aircraft_dynamics.h"
 #include "rt_nonfinite.h"
 
 // Function Declarations
@@ -46,7 +45,7 @@ static void argInit_9x1_real_T(double result[9]);
 
 static double argInit_real_T();
 
-static void main_aircraft_model();
+static void main_aircraft_model(aircraft_dynamics *instancePtr);
 
 // Function Definitions
 static void argInit_5x1_real_T(double result[5])
@@ -74,7 +73,7 @@ static double argInit_real_T()
   return 0.0;
 }
 
-static void main_aircraft_model()
+static void main_aircraft_model(aircraft_dynamics *instancePtr)
 {
   double Xdot[9];
   double dv[9];
@@ -85,19 +84,17 @@ static void main_aircraft_model()
   // Call the entry-point 'aircraft_model'.
   argInit_9x1_real_T(dv);
   argInit_5x1_real_T(dv1);
-  aircraft_model(dv, dv1, Xdot);
+  instancePtr->aircraft_model(dv, dv1, Xdot);
 }
 
 int main(int, char **)
 {
-  // The initialize function is being called automatically from your entry-point
-  // function. So, a call to initialize is not included here. Invoke the
-  // entry-point functions.
+  aircraft_dynamics *classInstance;
+  classInstance = new aircraft_dynamics;
+  // Invoke the entry-point functions.
   // You can call entry-point functions multiple times.
-  main_aircraft_model();
-  // Terminate the application.
-  // You do not need to do this more than one time.
-  aircraft_model_terminate();
+  main_aircraft_model(classInstance);
+  delete classInstance;
   return 0;
 }
 

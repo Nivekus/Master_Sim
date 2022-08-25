@@ -8,10 +8,13 @@ public class Unreal_Simulation : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Boost", "DynamicsModel" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
         bEnableUndefinedIdentifierWarnings = false;
+
+       // PublicIncludePaths.Add("DynamicsModel");
+
 
         // Uncomment if you are using Slate UI
         // PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

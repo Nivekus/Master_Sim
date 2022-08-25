@@ -14,6 +14,7 @@
 #include "rt_defines.h"
 #include <cmath>
 
+
 // Function Declarations
 static double rt_atan2d_snf(double u0, double u1);
 
@@ -102,8 +103,10 @@ aircraft_dynamics::aircraft_dynamics() = default;
 
 aircraft_dynamics::~aircraft_dynamics() = default;
 
-void aircraft_dynamics::aircraft_model(const double X[9], const double U[5],
-                                       double Xdot[9])
+
+
+void aircraft_dynamics::aircraft_model(double X[9], double U[5],
+                                       double Xdot[9]) const
 {
   static const double b[9]{-11.0, 0.0, 1.7, 0.0,  -14.006420569329665,
                            0.0,   5.0, 0.0, -11.5};

@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2021a">
-  <configuration build-checksum="2886367565" file="C:\Users\Kevin\Documents\Master_Sim\MATLAB\aircraft_model.prj" location="C:\Users\Kevin\Documents\Master_Sim\MATLAB" name="aircraft_model" target="target.unifiedcoder" target-name="MATLAB Coder">
+  <configuration build-checksum="1512617119" file="C:\Users\Kevin\Documents\Master_Sim\MATLAB\aircraft_model.prj" location="C:\Users\Kevin\Documents\Master_Sim\MATLAB" name="aircraft_model" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
       <param.BuiltInstrumentedMex />
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
@@ -169,8 +169,8 @@
     <profile key="profile.c">
       <param.WorkingFolder>option.WorkingFolder.Project</param.WorkingFolder>
       <param.SpecifiedWorkingFolder />
-      <param.BuildFolder>option.BuildFolder.Specified</param.BuildFolder>
-      <param.SpecifiedBuildFolder>C:\Users\Kevin\Documents\Master_Sim\MATLAB\Test_Class</param.SpecifiedBuildFolder>
+      <param.BuildFolder>option.BuildFolder.Project</param.BuildFolder>
+      <param.SpecifiedBuildFolder />
       <param.SearchPaths />
       <var.SimdQueryHardwareVendor>Generic</var.SimdQueryHardwareVendor>
       <var.SimdQueryHardwareType>MATLAB Host Computer</var.SimdQueryHardwareType>
@@ -373,6 +373,8 @@
       <unset>
         <param.WorkingFolder />
         <param.SpecifiedWorkingFolder />
+        <param.BuildFolder />
+        <param.SpecifiedBuildFolder />
         <param.SearchPaths />
         <var.SimdQueryHardwareVendor />
         <var.SimdQueryHardwareType />
@@ -557,13 +559,13 @@
       </unset>
     </profile>
     <param.objective>option.objective.c</param.objective>
-    <param.WorkflowStep>workflowSummary</param.WorkflowStep>
+    <param.WorkflowStep>generateCode</param.WorkflowStep>
     <param.TestSnippets>
       <item>aircraft_model(x0,u)</item>
     </param.TestSnippets>
     <param.ExternalFcnMajority>column</param.ExternalFcnMajority>
     <param.UseGlobals>option.UseGlobals.No</param.UseGlobals>
-    <param.outputfile>${PROJECT_ROOT}\Test_Class\aircraft_model.lib</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}\codegen\lib\aircraft_model\aircraft_model.lib</param.outputfile>
     <param.version>R2012a</param.version>
     <param.HasECoderFeatures>false</param.HasECoderFeatures>
     <param.HasGpuCoder>false</param.HasGpuCoder>
@@ -578,7 +580,7 @@
     <param.AutoInferUnboundedSizeThreshold>2048</param.AutoInferUnboundedSizeThreshold>
     <param.EnableFixedPointStep>false</param.EnableFixedPointStep>
     <param.EnableScreener>true</param.EnableScreener>
-    <param.AnnotationChecksum>1068328672</param.AnnotationChecksum>
+    <param.AnnotationChecksum>1569223171</param.AnnotationChecksum>
     <var.LegacyTarget />
     <var.MirrorOnOpen>false</var.MirrorOnOpen>
     <param.FixedPointEnabled>false</param.FixedPointEnabled>
@@ -586,9 +588,9 @@
     <var.DismissScreener>false</var.DismissScreener>
     <param.unifiedParamStorage />
     <param.hdlParamStorage />
-    <var.gc.lastOutputRoot>Test_Class</var.gc.lastOutputRoot>
+    <var.gc.lastOutputRoot>codegen\lib\aircraft_model</var.gc.lastOutputRoot>
     <var.gc.lastOutputType>C_CODE</var.gc.lastOutputType>
-    <var.gc.preBuildChecksum>2479160348</var.gc.preBuildChecksum>
+    <var.gc.preBuildChecksum>1512617119</var.gc.preBuildChecksum>
     <var.cfi.lastOutputRoot />
     <var.cfi.preBuildChecksum />
     <var.outdatedOnRestore>false</var.outdatedOnRestore>
@@ -610,7 +612,7 @@
     <param.mex.outputfile>aircraft_model_mex</param.mex.outputfile>
     <param.grt.outputfile>aircraft_model</param.grt.outputfile>
     <param.artifact>option.target.artifact.lib</param.artifact>
-    <param.outputfile>${PROJECT_ROOT}\Test_Class\aircraft_model.lib</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}\codegen\lib\aircraft_model\aircraft_model.lib</param.outputfile>
     <param.CppNamespace />
     <param.CppPackagesToNamespaces>true</param.CppPackagesToNamespaces>
     <param.CppNamespaceForMathworksCode>coder</param.CppNamespaceForMathworksCode>
@@ -841,7 +843,7 @@
     </unset>
     <fileset.entrypoints>
       <file custom-data-expanded="false" value="${PROJECT_ROOT}\aircraft_model.m">
-        <Marker>1660926423156</Marker>
+        <Marker>1661339927496</Marker>
       </file>
     </fileset.entrypoints>
     <fileset.testbench />
@@ -874,7 +876,7 @@
       </file>
     </fileset.inputtypes>
     <build-deliverables>
-      <file location="${PROJECT_ROOT}\Test_Class" name="aircraft_model.lib" optional="false">C:\Users\Kevin\Documents\Master_Sim\MATLAB\Test_Class\aircraft_model.lib</file>
+      <file location="${PROJECT_ROOT}\codegen\lib\aircraft_model" name="aircraft_model.lib" optional="false">C:\Users\Kevin\Documents\Master_Sim\MATLAB\codegen\lib\aircraft_model\aircraft_model.lib</file>
     </build-deliverables>
     <workflow />
     <matlab>
