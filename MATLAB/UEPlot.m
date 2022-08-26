@@ -2,6 +2,13 @@
 poselog = importdata("../Unreal_Simulation/Source/pose_log.txt")
 
 time = cumsum(poselog(:,7));
+
+
+poselog(:,14) = poselog(:,14) *180/pi;
+poselog(:,15) = poselog(:,15) *180/pi;
+poselog(:,16) = poselog(:,16) *180/pi;
+
+
 % figure;
 % subplot(3,1,1)
 % plot(time,poselog(:,1));

@@ -109,7 +109,7 @@ void ADrone::calcStep(double dt) {
 void ADrone::get_earth_velocity(const double v[3], double phi, double theta, double psi,
 	double y[3])
 {
-	static const signed char iv[3]{ 0, 0, 1 };
+	static const signed char iv[3] = { 0, 0, 1 };
 	double c_Rtheta_tmp[9];
 	double dv[9];
 	double dv1[9];
@@ -117,13 +117,17 @@ void ADrone::get_earth_velocity(const double v[3], double phi, double theta, dou
 	double Rpsi_tmp;
 	double Rtheta_tmp;
 	double b_Rphi_tmp;
+	double b_Rpsi_tmp;
 	double b_Rtheta_tmp;
+	int i;
 	int i1;
-	Rpsi_tmp = std::cos(psi);
-	Rtheta_tmp = std::sin(theta);
-	b_Rtheta_tmp = std::cos(theta);
-	Rphi_tmp = std::sin(phi);
-	b_Rphi_tmp = std::cos(phi);
+	int i2;
+	Rpsi_tmp = sin(psi);
+	b_Rpsi_tmp = cos(psi);
+	Rtheta_tmp = sin(theta);
+	b_Rtheta_tmp = cos(theta);
+	Rphi_tmp = sin(phi);
+	b_Rphi_tmp = cos(phi);
 	dv[1] = 0.0;
 	dv[4] = b_Rphi_tmp;
 	dv[7] = Rphi_tmp;
@@ -142,31 +146,31 @@ void ADrone::get_earth_velocity(const double v[3], double phi, double theta, dou
 	c_Rtheta_tmp[2] = Rtheta_tmp;
 	c_Rtheta_tmp[5] = 0.0;
 	c_Rtheta_tmp[8] = b_Rtheta_tmp;
-	for (int i{ 0 }; i < 3; i++) {
-		i1 = static_cast<int>(dv[i]);
+	for (i = 0; i < 3; i++) {
+		i1 = (int)dv[i];
 		b_Rtheta_tmp = dv[i + 3];
 		Rphi_tmp = dv[i + 6];
-		for (int i2{ 0 }; i2 < 3; i2++) {
-			dv1[i + 3 * i2] = (static_cast<double>(i1) * c_Rtheta_tmp[3 * i2] +
+		for (i2 = 0; i2 < 3; i2++) {
+			dv1[i + 3 * i2] = ((double)i1 * c_Rtheta_tmp[3 * i2] +
 				b_Rtheta_tmp * c_Rtheta_tmp[3 * i2 + 1]) +
 				Rphi_tmp * c_Rtheta_tmp[3 * i2 + 2];
 		}
 	}
-	c_Rtheta_tmp[0] = Rpsi_tmp;
-	c_Rtheta_tmp[3] = 0.41211848524175659;
+	c_Rtheta_tmp[0] = b_Rpsi_tmp;
+	c_Rtheta_tmp[3] = Rpsi_tmp;
 	c_Rtheta_tmp[6] = 0.0;
-	c_Rtheta_tmp[1] = -std::sin(psi);
-	c_Rtheta_tmp[4] = Rpsi_tmp;
+	c_Rtheta_tmp[1] = -Rpsi_tmp;
+	c_Rtheta_tmp[4] = b_Rpsi_tmp;
 	c_Rtheta_tmp[7] = 0.0;
-	for (int i{ 0 }; i < 3; i++) {
+	for (i = 0; i < 3; i++) {
 		i1 = iv[i];
 		c_Rtheta_tmp[3 * i + 2] = i1;
 		b_Rtheta_tmp = 0.0;
 		Rphi_tmp = c_Rtheta_tmp[3 * i];
 		Rtheta_tmp = c_Rtheta_tmp[3 * i + 1];
-		for (int i2{ 0 }; i2 < 3; i2++) {
+		for (i2 = 0; i2 < 3; i2++) {
 			b_Rtheta_tmp += ((dv1[i2] * Rphi_tmp + dv1[i2 + 3] * Rtheta_tmp) +
-				dv1[i2 + 6] * static_cast<double>(i1)) *
+				dv1[i2 + 6] * (double)i1) *
 				v[i2];
 		}
 		y[i] = b_Rtheta_tmp;
@@ -181,9 +185,9 @@ void ADrone::update_aircraft(double dt, double& pos_x, double& pos_y, double& po
 	pos_x = position[0];
 	pos_y = position[1];
 	pos_z = position[2];
-	phi = X[7];
-	theta = X[8];
-	psi = X[9];
+	phi = X[6];
+	theta = X[7];
+	psi = X[8];
 
 
 

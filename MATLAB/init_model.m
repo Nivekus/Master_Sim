@@ -40,7 +40,9 @@ TF = 40;
 
 %% RUN Simulation 
 res = sim("modelsim.slx")
-
+res.simX.signals.values(:,7) = res.simX.signals.values(:,7) * 180/pi;
+res.simX.signals.values(:,8) = res.simX.signals.values(:,8) * 180/pi;
+res.simX.signals.values(:,9) = res.simX.signals.values(:,9) * 180/pi;
 %% PLOT states
 
 % subplot(3,3,1)

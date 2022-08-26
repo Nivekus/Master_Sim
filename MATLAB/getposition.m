@@ -6,7 +6,7 @@ function y = getposition(v,phi,theta,psi)
 
 
 
-    Rpsi = [cos(x9) sin(9) 0;
+    Rpsi = [cos(x9) sin(x9) 0;
             -sin(x9) cos(x9) 0;
             0 0 1];
     
