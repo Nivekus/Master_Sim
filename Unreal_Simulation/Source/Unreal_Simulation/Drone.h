@@ -2,20 +2,17 @@
 
 #pragma once
 
+
+#define LOGGING true
+
+
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 
 #include <cstddef>
 #include <cstdlib>
+#include <sstream>
 
-// includes for Dynamics model from Matlab Codegen
-//#include "../DynamicsModel/rtwtypes.h"
-//#include "../DynamicsModel/aircraft_dynamics.h"
-//#include "../DynamicsModel/rt_nonfinite.h"
-
-//#include <rt_nonfinite.h>
-//#include <rtwtypes.h>
-// includes boost library using plugin
 THIRD_PARTY_INCLUDES_START
 #pragma push_macro("check")
 #undef check
@@ -41,6 +38,7 @@ public:
 	aircraft_dynamics* dynamics;
 	//boost::numeric::odeint::runge_kutta4<x_type> integrator;
 	
+	FString str="";
 	
 	void get_earth_velocity(const double v[3], double phi, double theta, double psi,
 		double y[3]);

@@ -15,7 +15,7 @@ x0 = [ 85;
         0];
 
 
-initpos = [0;0;1000]
+initpos = [0;0;500]
 
 
 % Rtheta =[cos(0.1) 0 -sin(0.1);
@@ -36,7 +36,7 @@ u = [0;
      0.08;
      0.08];
 
-TF = 180;
+TF = 40;
 
 %% RUN Simulation 
 res = sim("modelsim.slx")

@@ -184,5 +184,18 @@ void ADrone::update_aircraft(double dt, double& x, double& y, double& z, double&
 	phi =	X[7];
 	theta = X[8];
 	psi =	X[9];
+
+
+
+
+
+	if (LOGGING) {
+		//FString strs;
+		//strs << x << " " << y << " " << z <<" " << phi << " " << theta << " " << psi << " "<< dt << std::endl;
+		str = str + FString::SanitizeFloat(x) + " " + FString::SanitizeFloat(y) + " " + FString::SanitizeFloat(z) + " " + FString::SanitizeFloat(phi) + " " + FString::SanitizeFloat(theta) + " " + FString::SanitizeFloat(psi) + " " + FString::SanitizeFloat(dt) + "\n";
+		FFileHelper::SaveStringToFile(str , *(FPaths::GameSourceDir() + "pose_log.txt"));
+	}
+
+
 }
 
