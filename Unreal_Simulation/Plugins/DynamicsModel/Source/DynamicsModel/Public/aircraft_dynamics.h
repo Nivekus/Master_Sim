@@ -17,11 +17,11 @@
 #include <cstdlib>
 
 // Type Definitions
-class aircraft_dynamics {
+ class __declspec(dllexport) aircraft_dynamics {
 public:
   aircraft_dynamics();
   ~aircraft_dynamics();
-  void aircraft_model( const double X[9],  const double U[5], double Xdot[9]) ;
+  void aircraft_model(const double X[9], const double U[5], double Xdot[9]);
 };
 
 #endif

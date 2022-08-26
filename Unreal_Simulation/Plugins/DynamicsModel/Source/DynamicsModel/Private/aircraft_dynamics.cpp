@@ -103,10 +103,8 @@ aircraft_dynamics::aircraft_dynamics() = default;
 aircraft_dynamics::~aircraft_dynamics() = default;
 
 
-
-void aircraft_dynamics::aircraft_model(const double X[9], const double U[5],
-                                       double Xdot[9])
-{
+void aircraft_dynamics::aircraft_model(const double X[9],const  double U[5],
+    double Xdot[9]) {
   static const double b[9]{-11.0, 0.0, 1.7, 0.0,  -14.006420569329665,
                            0.0,   5.0, 0.0, -11.5};
   static const double c_a[9]{4.8084E+6, 0.0, -251075.99999999997, 0.0,

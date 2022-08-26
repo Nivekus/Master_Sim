@@ -229,9 +229,6 @@ function Xdot  = aircraft_model(X,U)
                 0 sin(x7)/cos(x8) cos(x7)/cos(x8);];
     x7to9dot = H_phi*wbe_b;
 
-
-
-
     Xdot = [x1to3dot;
             x4to6dot;
             x7to9dot];

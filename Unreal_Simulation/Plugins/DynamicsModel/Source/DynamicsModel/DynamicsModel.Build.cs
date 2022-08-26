@@ -7,7 +7,11 @@ public class DynamicsModel : ModuleRules
 {
 	public DynamicsModel(ReadOnlyTargetRules Target) : base(Target)
 	{
-		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+
+        PublicDependencyModuleNames.AddRange(new string[] {  "Boost"});
+
+
+        PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
         //Type = ModuleType.External;
 
         PublicIncludePaths.AddRange(
