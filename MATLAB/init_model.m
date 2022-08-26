@@ -43,52 +43,52 @@ res = sim("modelsim.slx")
 
 %% PLOT states
 
-subplot(3,3,1)
-plot(res.tout,res.simX.signals.values(:,1));
-title("u")
-
-subplot(3,3,4)
-plot(res.tout,res.simX.signals.values(:,2));
-title("v")
-
-subplot(3,3,7)
-plot(res.tout,res.simX.signals.values(:,3));
-title("w")
-
-subplot(3,3,2)
-plot(res.tout,res.simX.signals.values(:,4));
-title("p")
-
-subplot(3,3,5)
-plot(res.tout,res.simX.signals.values(:,5));
-title("q")
-
-subplot(3,3,8)
-plot(res.tout,res.simX.signals.values(:,6));
-title("r")
-
-subplot(3,3,3)
-plot(res.tout,res.simX.signals.values(:,7));
-title("phi")
-
-subplot(3,3,6)
-plot(res.tout,res.simX.signals.values(:,8));
-title("theta")
-
-subplot(3,3,9)
-plot(res.tout,res.simX.signals.values(:,9));
-title("psi")
-
-
-figure;
-subplot(3,1,1)
-plot(res.tout,res.simX2.signals.values(1,:));
-title("x")
-
-subplot(3,1,2)
-plot(res.tout,res.simX2.signals.values(2,:));
-title("y")
-
-subplot(3,1,3)
-plot(res.tout,res.simX2.signals.values(3,:));
-title("h")
+% subplot(3,3,1)
+% plot(res.tout,res.simX.signals.values(:,1));
+% title("u")
+% 
+% subplot(3,3,4)
+% plot(res.tout,res.simX.signals.values(:,2));
+% title("v")
+% 
+% subplot(3,3,7)
+% plot(res.tout,res.simX.signals.values(:,3));
+% title("w")
+% 
+% subplot(3,3,2)
+% plot(res.tout,res.simX.signals.values(:,4));
+% title("p")
+% 
+% subplot(3,3,5)
+% plot(res.tout,res.simX.signals.values(:,5));
+% title("q")
+% 
+% subplot(3,3,8)
+% plot(res.tout,res.simX.signals.values(:,6));
+% title("r")
+% 
+% subplot(3,3,3)
+% plot(res.tout,res.simX.signals.values(:,7));
+% title("phi")
+% 
+% subplot(3,3,6)
+% plot(res.tout,res.simX.signals.values(:,8));
+% title("theta")
+% 
+% subplot(3,3,9)
+% plot(res.tout,res.simX.signals.values(:,9));
+% title("psi")
+% 
+% 
+% figure;
+% subplot(3,1,1)
+% plot(res.tout,res.simX2.signals.values(1,:));
+% title("x")
+% 
+% subplot(3,1,2)
+% plot(res.tout,res.simX2.signals.values(2,:));
+% title("y")
+% 
+% subplot(3,1,3)
+% plot(res.tout,res.simX2.signals.values(3,:));
+% title("h")

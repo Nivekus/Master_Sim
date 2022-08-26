@@ -24,7 +24,7 @@ ADrone::ADrone()
 	U[3] = 0.08;
 	U[4] = 0.08;
 
-	
+
 }
 
 // Called when the game starts or when spawned
@@ -82,7 +82,7 @@ void ADrone::setposition(double x, double y, double z) {
 void ADrone::calcStep(double dt) {
 	double Xdot[9];
 	dynamics->aircraft_model(X, U, Xdot);
-	
+
 
 	//euler 
 	for (int i = 0; i < 8; i++) {
@@ -96,8 +96,8 @@ void ADrone::calcStep(double dt) {
 	v[0] = X[0];
 	v[1] = X[1];
 	v[2] = X[2];
-	
-	get_earth_velocity(v, X[7], X[8], X[9],y);
+
+	get_earth_velocity(v, X[6], X[7], X[8], y);
 
 	for (int i = 0; i < 3; i++) {
 		position[i] += dt * y[i];
@@ -175,15 +175,15 @@ void ADrone::get_earth_velocity(const double v[3], double phi, double theta, dou
 }
 
 
-void ADrone::update_aircraft(double dt, double& x, double& y, double& z, double& phi, double& theta, double& psi) {
+void ADrone::update_aircraft(double dt, double& pos_x, double& pos_y, double& pos_z, double& phi, double& theta, double& psi) {
 
 	calcStep(dt);
-	x = position[0];
-	y = position[1];
-	z = position[2];
-	phi =	X[7];
+	pos_x = position[0];
+	pos_y = position[1];
+	pos_z = position[2];
+	phi = X[7];
 	theta = X[8];
-	psi =	X[9];
+	psi = X[9];
 
 
 
@@ -192,8 +192,24 @@ void ADrone::update_aircraft(double dt, double& x, double& y, double& z, double&
 	if (LOGGING) {
 		//FString strs;
 		//strs << x << " " << y << " " << z <<" " << phi << " " << theta << " " << psi << " "<< dt << std::endl;
-		str = str + FString::SanitizeFloat(x) + " " + FString::SanitizeFloat(y) + " " + FString::SanitizeFloat(z) + " " + FString::SanitizeFloat(phi) + " " + FString::SanitizeFloat(theta) + " " + FString::SanitizeFloat(psi) + " " + FString::SanitizeFloat(dt) + "\n";
-		FFileHelper::SaveStringToFile(str , *(FPaths::GameSourceDir() + "pose_log.txt"));
+		str = str + FString::SanitizeFloat(pos_x)
+			+ " " + FString::SanitizeFloat(pos_y)
+			+ " " + FString::SanitizeFloat(pos_z)
+			+ " " + FString::SanitizeFloat(phi)
+			+ " " + FString::SanitizeFloat(theta)
+			+ " " + FString::SanitizeFloat(psi)
+			+ " " + FString::SanitizeFloat(dt)
+			+ " " + FString::SanitizeFloat(X[0])
+			+ " " + FString::SanitizeFloat(X[1])
+			+ " " + FString::SanitizeFloat(X[2])
+			+ " " + FString::SanitizeFloat(X[3])
+			+ " " + FString::SanitizeFloat(X[4])
+			+ " " + FString::SanitizeFloat(X[5]) 
+			+ " " + FString::SanitizeFloat(X[6]) 
+			+ " " + FString::SanitizeFloat(X[7]) 
+			+ " " + FString::SanitizeFloat(X[8]) 
+			+ "\n";
+		FFileHelper::SaveStringToFile(str, *(FPaths::GameSourceDir() + "pose_log.txt"));
 	}
 
 
