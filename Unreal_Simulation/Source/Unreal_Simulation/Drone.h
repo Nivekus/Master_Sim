@@ -3,7 +3,7 @@
 #pragma once
 
 
-#define LOGGING false
+#define LOGGING true
 
 
 #include "CoreMinimal.h"
@@ -34,17 +34,26 @@ public:
 	ADrone();
 	double X[9];
 	double U[5];
+	double U_r[5] = {0,0,0,0,0};
 	double position[3];
 	aircraft_dynamics* dynamics;
-	//boost::numeric::odeint::runge_kutta4<x_type> integrator;
 	
+	//for logging
 	FString str="";
 	
+
+	//aircraft control parameter
+	double k_eta_q = 10;
+	double k_eta_theta = 0;
+
 	void get_earth_velocity(const double v[3], double phi, double theta, double psi,
 		double y[3]);
 	
 	void calcStep(double dt);
 
+	void nick_daempfer();
+
+	void phygoid_daempfer();
 
 protected:
 	// Called when the game starts or when spawned

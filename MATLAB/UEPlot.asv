@@ -1,7 +1,7 @@
 
 poselog = importdata("../Unreal_Simulation/Source/pose_log.txt")
 
-time = cumsum([0; poselog(1:length(poselog(:,1))-1,7)]);
+time = cumsum([0 poselog(:,7)]);
 
 
 poselog(:,14) = poselog(:,14) *180/pi;

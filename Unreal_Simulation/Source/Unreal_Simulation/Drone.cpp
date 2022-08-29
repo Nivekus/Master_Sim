@@ -81,7 +81,19 @@ void ADrone::setposition(double x, double y, double z) {
 
 void ADrone::calcStep(double dt) {
 	double Xdot[9];
-	dynamics->aircraft_model(X, U, Xdot);
+
+	// calculate augmented control values U
+
+	double U_c[5];
+	U_c[0] = U[0] + U_r[0];
+	U_c[1] = U[1] + U_r[1];
+	U_c[2] = U[2] + U_r[2];
+	U_c[3] = U[3] + U_r[3];
+	U_c[4] = U[4] + U_r[4];
+
+
+
+	dynamics->aircraft_model(X, U_c, Xdot);
 
 
 	//euler 
@@ -181,19 +193,15 @@ void ADrone::get_earth_velocity(const double v[3], double phi, double theta, dou
 
 void ADrone::update_aircraft(double dt, double& pos_x, double& pos_y, double& pos_z, double& phi, double& theta, double& psi) {
 
-	calcStep(dt);
-	pos_x = position[0];
-	pos_y = position[1];
-	pos_z = position[2];
-	phi = X[6];
-	theta = X[7];
-	psi = X[8];
-
-
-
 
 
 	if (LOGGING) {
+		pos_x = position[0];
+		pos_y = position[1];
+		pos_z = position[2];
+		phi = X[6];
+		theta = X[7];
+		psi = X[8];
 		//FString strs;
 		//strs << x << " " << y << " " << z <<" " << phi << " " << theta << " " << psi << " "<< dt << std::endl;
 		str = str + FString::SanitizeFloat(pos_x)
@@ -208,14 +216,42 @@ void ADrone::update_aircraft(double dt, double& pos_x, double& pos_y, double& po
 			+ " " + FString::SanitizeFloat(X[2])
 			+ " " + FString::SanitizeFloat(X[3])
 			+ " " + FString::SanitizeFloat(X[4])
-			+ " " + FString::SanitizeFloat(X[5]) 
-			+ " " + FString::SanitizeFloat(X[6]) 
-			+ " " + FString::SanitizeFloat(X[7]) 
-			+ " " + FString::SanitizeFloat(X[8]) 
+			+ " " + FString::SanitizeFloat(X[5])
+			+ " " + FString::SanitizeFloat(X[6])
+			+ " " + FString::SanitizeFloat(X[7])
+			+ " " + FString::SanitizeFloat(X[8])
+			+ " " + FString::SanitizeFloat(U[0] + U_r[0])
+			+ " " + FString::SanitizeFloat(U[1] + U_r[1])
+			+ " " + FString::SanitizeFloat(U[2] + U_r[2])
+			+ " " + FString::SanitizeFloat(U[3] + U_r[3])
+			+ " " + FString::SanitizeFloat(U[4] + U_r[4])
 			+ "\n";
 		FFileHelper::SaveStringToFile(str, *(FPaths::GameSourceDir() + "pose_log.txt"));
 	}
 
 
+
+	calcStep(dt);
+
+	//reset control values
+	for (int i = 0; i < 5; i++) {
+		U_r[i] = 0;
+	}
+
+
+	//phygoid_daempfer();
+	nick_daempfer();
+
+
 }
+
+
+void ADrone::nick_daempfer() {
+	U_r[1] += k_eta_q * X[4];
+}
+
+void ADrone::phygoid_daempfer() {
+	U_r[1] += k_eta_theta * X[7];
+}
+
 

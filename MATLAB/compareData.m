@@ -1,4 +1,11 @@
 
+clear all
+close all
+clc
+
+
+k_eta_q = 10;
+k_eta_theta = 0;
 
 % get data
 init_model
@@ -145,3 +152,24 @@ title("y")
 subplot(3,1,3)
 plot(time,poselog(:,3),res.tout,res.simX2.signals.values(3,:));
 title("h")
+
+figure;
+subplot(5,1,1)
+plot(time,poselog(:,17),res.tout,res.simU.signals.values(:,1));
+title("Querruder")
+
+subplot(5,1,2)
+plot(time,poselog(:,18),res.tout,res.simU.signals.values(:,2));
+title("Hoehenruder")
+
+subplot(5,1,3)
+plot(time,poselog(:,19),res.tout,res.simU.signals.values(:,3));
+title("Seitenruder")
+
+subplot(5,1,4)
+plot(time,poselog(:,20),res.tout,res.simU.signals.values(:,4));
+title("Triebwerk1")
+
+subplot(5,1,5)
+plot(time,poselog(:,21),res.tout,res.simU.signals.values(:,5));
+title("triebwerk2")
