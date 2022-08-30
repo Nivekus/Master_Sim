@@ -43,18 +43,27 @@ public:
 	
 
 	//aircraft control parameter
+	// dampener
 	double k_eta_q = 10;
-	double k_eta_theta = 5;
+	double k_eta_theta = 50;
+	// height
+	double k_theta_H = 0.009;
+	double k_f_V = 0.01;
+	double r_f_V = 10;
+
+
 
 	void get_earth_velocity(const double v[3], double phi, double theta, double psi,
 		double y[3]);
 	
 	void calcStep(double dt);
 
-	void nick_daempfer();
+	void pitch_daempner();
 
-	void phygoid_daempfer();
+	void phygoid_daempner();
 
+	void hight_controller(double h_c, double dt);
+ 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

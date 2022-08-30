@@ -5,11 +5,17 @@ clc
 
 
 k_eta_q = 10;
-k_eta_theta = 5;
+k_eta_theta = 50;
+k_theta_H = 0.009;
+k_f_V = 0;
+r_f_V = 0;
+
+Hc = 500;
+Vc = 100;
 
 % get data
-init_model
-UEPlot
+init_model;
+UEPlot;
 %% plot sim
 figure
 subplot(3,3,1)

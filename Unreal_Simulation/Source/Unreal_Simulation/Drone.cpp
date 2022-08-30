@@ -21,8 +21,8 @@ ADrone::ADrone()
 	U[0] = 0;
 	U[1] = -0.2;
 	U[2] = 0;
-	U[3] = 0.08;
-	U[4] = 0.08;
+	U[3] = 0.088;
+	U[4] = 0.088;
 
 
 }
@@ -239,19 +239,25 @@ void ADrone::update_aircraft(double dt, double& pos_x, double& pos_y, double& po
 	}
 
 
-	phygoid_daempfer();
-	nick_daempfer();
-
+	phygoid_daempner();
+	pitch_daempner();
+	hight_controller(500, dt);
 
 }
 
 
-void ADrone::nick_daempfer() {
+void ADrone::pitch_daempner() {
 	U_r[1] += k_eta_q * X[4];
 }
 
-void ADrone::phygoid_daempfer() {
+void ADrone::phygoid_daempner() {
 	U_r[1] += k_eta_theta * X[7];
+}
+
+void ADrone::hight_controller(double h_c, double dt) {
+	double h_error;
+	h_error = position[2] - h_c;
+	U_r[1] -= -k_eta_theta*(k_theta_H * h_error);
 }
 
 

@@ -1,8 +1,8 @@
 %%Init Sim
 
 plot_states = false;
-plot_position = true;
-plot_input = true;
+plot_position = false;
+plot_input = false;
 plot_gamma_alpha = false;
 x0 = [ 85;
         0;
@@ -31,10 +31,10 @@ initpos = [0;0;500]
 
 
 u = [0;
-     -0.256;
+     -0.2;
      0;
-     0.082;
-     0.082];
+     0.08;
+     0.08];
 
 TF = 100;
 
