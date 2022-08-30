@@ -38,6 +38,8 @@ public:
 	double position[3];
 	aircraft_dynamics* dynamics;
 	
+
+
 	//for logging
 	FString str="";
 	
@@ -51,6 +53,7 @@ public:
 	double k_f_V = 0.01;
 	double r_f_V = 10;
 
+	double V_integral = 0;
 
 
 	void get_earth_velocity(const double v[3], double phi, double theta, double psi,
@@ -62,7 +65,7 @@ public:
 
 	void phygoid_daempner();
 
-	void hight_controller(double h_c, double dt);
+	void hight_controller(double H_c, double V_c, double dt);
  
 protected:
 	// Called when the game starts or when spawned
@@ -85,4 +88,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void update_aircraft(double dt, double &x, double& y, double& z, double& phi, double& theta, double& psi);
+
+	UFUNCTION(BlueprintCallable)
+		void get_u_w_v(double& u, double& v, double& w);
 };

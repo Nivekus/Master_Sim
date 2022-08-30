@@ -48,6 +48,13 @@ void ADrone::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+
+void ADrone::get_u_w_v(double& u, double& v, double& w) {
+	u = X[0];
+	v = X[1];
+	w = X[2];
+}
+
 void ADrone::setU(double u0, double u1, double u2, double u3, double u4)
 {
 	U[0] = u0;
@@ -241,7 +248,7 @@ void ADrone::update_aircraft(double dt, double& pos_x, double& pos_y, double& po
 
 	phygoid_daempner();
 	pitch_daempner();
-	hight_controller(500, dt);
+	hight_controller(500, 100, dt);
 
 }
 
@@ -254,10 +261,32 @@ void ADrone::phygoid_daempner() {
 	U_r[1] += k_eta_theta * X[7];
 }
 
-void ADrone::hight_controller(double h_c, double dt) {
-	double h_error;
-	h_error = position[2] - h_c;
-	U_r[1] -= -k_eta_theta*(k_theta_H * h_error);
+void ADrone::hight_controller(double H_c, double V_c, double dt) {
+	
+	double H_error;
+	H_error = position[2] - H_c;
+	U_r[1] -= -k_eta_theta*(k_theta_H * H_error);
+
+
+	// PI control
+	double V = std::sqrt(X[0] * X[0] + X[1] * X[1] + X[2] * X[2]);
+	double V_error = V_c - V;
+	double Pout = r_f_V * V_error;
+	
+	V_integral += V_error * dt;
+	/*{if (V_integral <= 0.0087266462599716477) {
+		V_integral = 0.0087266462599716477;
+	}
+	else if (V_integral > 0.17453292519943295) {
+		V_integral = 0.17453292519943295;
+	}*/
+
+
+	double Iout = k_f_V * V_integral;
+
+	U_r[3] += Iout + Pout;
+	U_r[4] += Iout + Pout;
+
 }
 
 
