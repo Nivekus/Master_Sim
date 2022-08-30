@@ -44,7 +44,7 @@ public:
 
 	//aircraft control parameter
 	double k_eta_q = 10;
-	double k_eta_theta = 0;
+	double k_eta_theta = 5;
 
 	void get_earth_velocity(const double v[3], double phi, double theta, double psi,
 		double y[3]);

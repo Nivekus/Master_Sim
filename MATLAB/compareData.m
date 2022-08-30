@@ -5,7 +5,7 @@ clc
 
 
 k_eta_q = 10;
-k_eta_theta = 0;
+k_eta_theta = 5;
 
 % get data
 init_model

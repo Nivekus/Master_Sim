@@ -239,7 +239,7 @@ void ADrone::update_aircraft(double dt, double& pos_x, double& pos_y, double& po
 	}
 
 
-	//phygoid_daempfer();
+	phygoid_daempfer();
 	nick_daempfer();
 
 

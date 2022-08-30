@@ -5,7 +5,7 @@ k_eta_q = 12
 k_eta_theta = 0;
 init_model;
 
-k_eta_q = 12;
+k_eta_q = 10;
 k_eta_theta = 5;
 init_model;
 
