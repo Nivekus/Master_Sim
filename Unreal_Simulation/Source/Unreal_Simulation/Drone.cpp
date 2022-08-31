@@ -78,6 +78,13 @@ void ADrone::setX0(double x0, double x1, double x2, double x3, double x4, double
 
 }
 
+void ADrone::set_orientation(double x6, double x7, double x8) {
+	X[6] = x6;
+	X[7] = x7;
+	X[8] = x8;
+}
+
+
 void ADrone::setposition(double x, double y, double z) {
 	position[0] = x;
 	position[1] = y;
@@ -248,7 +255,7 @@ void ADrone::update_aircraft(double dt, double& pos_x, double& pos_y, double& po
 
 	phygoid_daempner();
 	pitch_daempner();
-	hight_controller(500, 100, dt);
+	hight_controller(h_c, v_c, dt);
 
 }
 
@@ -272,7 +279,7 @@ void ADrone::hight_controller(double H_c, double V_c, double dt) {
 	double V = std::sqrt(X[0] * X[0] + X[1] * X[1] + X[2] * X[2]);
 	double V_error = V_c - V;
 	double Pout = r_f_V * V_error;
-	
+	static double V_integral = 0;
 	V_integral += V_error * dt;
 	/*{if (V_integral <= 0.0087266462599716477) {
 		V_integral = 0.0087266462599716477;
@@ -289,4 +296,10 @@ void ADrone::hight_controller(double H_c, double V_c, double dt) {
 
 }
 
+void ADrone::set_v_c(double v) {
+	this->v_c = v;
+}
 
+void ADrone::set_h_c(double h) {
+	this->h_c = h;
+}

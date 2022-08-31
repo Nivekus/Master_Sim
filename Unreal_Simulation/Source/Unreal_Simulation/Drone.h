@@ -20,7 +20,6 @@ THIRD_PARTY_INCLUDES_START
 #include <aircraft_dynamics.h>
 #pragma pop_macro("check")
 THIRD_PARTY_INCLUDES_END
-
 #include "Drone.generated.h"
 
 
@@ -32,11 +31,14 @@ class UNREAL_SIMULATION_API ADrone : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ADrone();
+	aircraft_dynamics* dynamics;
+
+
+	//set intial conditions
 	double X[9];
 	double U[5];
 	double U_r[5] = {0,0,0,0,0};
 	double position[3];
-	aircraft_dynamics* dynamics;
 	
 
 
@@ -53,7 +55,9 @@ public:
 	double k_f_V = 0.01;
 	double r_f_V = 10;
 
-	double V_integral = 0;
+	//desired values
+	double v_c = 100;
+	double h_c = 500;
 
 
 	void get_earth_velocity(const double v[3], double phi, double theta, double psi,
@@ -87,8 +91,18 @@ public:
 		void setX0(double x0, double x1, double x2, double x3, double x4, double x5, double x6, double x7, double x8);
 
 	UFUNCTION(BlueprintCallable)
+		void set_v_c(double v);
+
+	UFUNCTION(BlueprintCallable)
+		void set_h_c(double h);
+	
+	UFUNCTION(BlueprintCallable)
+		void set_orientation(double x6, double x7, double x8);
+
+	UFUNCTION(BlueprintCallable)
 		void update_aircraft(double dt, double &x, double& y, double& z, double& phi, double& theta, double& psi);
 
 	UFUNCTION(BlueprintCallable)
 		void get_u_w_v(double& u, double& v, double& w);
+
 };
