@@ -24,6 +24,8 @@ ADrone::ADrone()
 	U[3] = 0.088;
 	U[4] = 0.088;
 
+	r_u_prev = X[5];
+	r_y_prev = X[5];
 
 }
 
@@ -92,7 +94,6 @@ void ADrone::setposition(double x, double y, double z) {
 }
 
 
-
 void ADrone::calcStep(double dt) {
 	double Xdot[9];
 
@@ -111,7 +112,7 @@ void ADrone::calcStep(double dt) {
 
 
 	//euler 
-	for (int i = 0; i < 8; i++) {
+	for (int i = 0; i < 9; i++) {
 		X[i] += dt * Xdot[i];
 	}
 
@@ -204,7 +205,6 @@ void ADrone::get_earth_velocity(const double v[3], double phi, double theta, dou
 	y[2] = -y[2];
 }
 
-
 void ADrone::update_aircraft(double dt, double& pos_x, double& pos_y, double& pos_z, double& phi, double& theta, double& psi) {
 
 
@@ -253,18 +253,18 @@ void ADrone::update_aircraft(double dt, double& pos_x, double& pos_y, double& po
 	}
 
 
-	phygoid_daempner();
-	pitch_daempner();
+	phygoid_damper();
+	pitch_damper();
+	yaw_damper(dt);
 	hight_controller(h_c, v_c, dt);
-
+	
 }
 
-
-void ADrone::pitch_daempner() {
+void ADrone::pitch_damper() {
 	U_r[1] += k_eta_q * X[4];
 }
 
-void ADrone::phygoid_daempner() {
+void ADrone::phygoid_damper() {
 	U_r[1] += k_eta_theta * X[7];
 }
 
@@ -296,6 +296,22 @@ void ADrone::hight_controller(double H_c, double V_c, double dt) {
 
 }
 
+void ADrone::yaw_damper(double dt) {
+	
+	// high pass filter sT/(1+Ts)
+	double y_k;
+	double y_k_1 = r_y_prev;
+	double u_k = X[5];			//r
+	double u_k_1 = r_u_prev;
+
+	y_k = T / (dt + T) * (u_k - u_k_1 + y_k_1);
+	// update prev values 
+	r_y_prev = y_k;
+	r_u_prev = u_k;
+
+	// P control
+	U_r[2] += k_zeta_r * y_k;
+}
 void ADrone::set_v_c(double v) {
 	this->v_c = v;
 }

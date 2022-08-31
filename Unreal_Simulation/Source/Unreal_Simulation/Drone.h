@@ -47,9 +47,16 @@ public:
 	
 
 	//aircraft control parameter
-	// dampener
+	// damper longitudinal
 	double k_eta_q = 10;
 	double k_eta_theta = 50;
+	// damper lateral
+	double k_zeta_r = 10;
+	double T = 0.01;
+
+	double r_u_prev;
+	double r_y_prev;
+
 	// height
 	double k_theta_H = 0.009;
 	double k_f_V = 0.01;
@@ -65,9 +72,11 @@ public:
 	
 	void calcStep(double dt);
 
-	void pitch_daempner();
+	void pitch_damper();
 
-	void phygoid_daempner();
+	void phygoid_damper();
+
+	void yaw_damper(double dt);
 
 	void hight_controller(double H_c, double V_c, double dt);
  

@@ -13,6 +13,11 @@ r_f_V = 10;
 Hc = 500;
 Vc = 100;
 
+k_zeta_r = 0;
+T = 0.0;
+
+
+
 % get data
 init_model;
 UEPlot;
