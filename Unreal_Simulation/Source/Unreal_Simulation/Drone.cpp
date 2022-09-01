@@ -19,13 +19,13 @@ ADrone::ADrone()
 	X[8] = 0;
 
 	U[0] = 0;
-	U[1] = -0.2;
+	U[1] = -0.1;
 	U[2] = 0;
-	U[3] = 0.088;
-	U[4] = 0.088;
+	U[3] = 0.08;
+	U[4] = 0.08;
 
 	r_u_prev = X[5];
-	r_y_prev = X[5];
+	r_y_prev = 0;
 
 }
 
@@ -206,8 +206,8 @@ void ADrone::get_earth_velocity(const double v[3], double phi, double theta, dou
 }
 
 void ADrone::update_aircraft(double dt, double& pos_x, double& pos_y, double& pos_z, double& phi, double& theta, double& psi) {
-
-
+	hight_controller(h_c, v_c, dt);
+	phi_controller(0.1745, dt);
 
 	if (LOGGING) {
 		pos_x = position[0];
@@ -256,12 +256,16 @@ void ADrone::update_aircraft(double dt, double& pos_x, double& pos_y, double& po
 	phygoid_damper();
 	pitch_damper();
 	yaw_damper(dt);
-	hight_controller(h_c, v_c, dt);
-	
+	roll_damper();
+	curve_coordination();
 }
 
 void ADrone::pitch_damper() {
 	U_r[1] += k_eta_q * X[4];
+}
+
+void ADrone::roll_damper() {
+	U_r[0] += k_xi_p * X[3];
 }
 
 void ADrone::phygoid_damper() {
@@ -281,20 +285,29 @@ void ADrone::hight_controller(double H_c, double V_c, double dt) {
 	double Pout = r_f_V * V_error;
 	static double V_integral = 0;
 	V_integral += V_error * dt;
-	/*{if (V_integral <= 0.0087266462599716477) {
-		V_integral = 0.0087266462599716477;
-	}
-	else if (V_integral > 0.17453292519943295) {
-		V_integral = 0.17453292519943295;
-	}*/
-
-
 	double Iout = k_f_V * V_integral;
 
 	U_r[3] += Iout + Pout;
 	U_r[4] += Iout + Pout;
 
 }
+
+void ADrone::phi_controller(double phi_c,double dt) {
+
+	double phi_error;
+	phi_error = X[6] - phi_c;
+
+	// PI control
+	double Pout = k_xi_phi * phi_error;
+	static double phi_integral = 0;
+	phi_integral += phi_error * dt;
+
+	double Iout = phi_integral * i_xi_phi;
+
+	U_r[0] += Iout + Pout;
+
+}
+
 
 void ADrone::yaw_damper(double dt) {
 	
@@ -308,10 +321,20 @@ void ADrone::yaw_damper(double dt) {
 	// update prev values 
 	r_y_prev = y_k;
 	r_u_prev = u_k;
-
+	
 	// P control
-	U_r[2] += k_zeta_r * y_k;
+	U_r[2] = k_zeta_r * y_k;
+//	U_r[2] += k_zeta_r * X[5];
 }
+
+void ADrone::curve_coordination() {
+	double V = std::sqrt(X[0] * X[0] + X[1] * X[1] + X[2] * X[2]);
+	double beta = asin(X[1] / V);
+	
+	U_r[2] += k_zeta_beta * beta;
+}
+
+
 void ADrone::set_v_c(double v) {
 	this->v_c = v;
 }
@@ -319,3 +342,12 @@ void ADrone::set_v_c(double v) {
 void ADrone::set_h_c(double h) {
 	this->h_c = h;
 }
+
+void ADrone::set_k_zeta_r(double k, double t) {
+	this->k_zeta_r = k;
+	this->T = T;
+}
+
+void ADrone::set_k_xi_p(double k) {
+	this->k_xi_p = k;
+};

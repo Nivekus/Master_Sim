@@ -12,7 +12,7 @@
 #include <cstddef>
 #include <cstdlib>
 #include <sstream>
-
+#include <math.h>
 THIRD_PARTY_INCLUDES_START
 #pragma push_macro("check")
 #undef check
@@ -48,11 +48,16 @@ public:
 
 	//aircraft control parameter
 	// damper longitudinal
-	double k_eta_q = 10;
-	double k_eta_theta = 50;
+	double k_eta_q = 5;
+	double k_eta_theta = 20;
 	// damper lateral
-	double k_zeta_r = 10;
-	double T = 0.01;
+	double k_zeta_r = 15;
+	double T = 0.1;
+	double k_xi_p = 0.3;
+
+	//curve maneuver 
+	double k_zeta_beta = 20;
+
 
 	double r_u_prev;
 	double r_y_prev;
@@ -60,7 +65,12 @@ public:
 	// height
 	double k_theta_H = 0.009;
 	double k_f_V = 0.01;
-	double r_f_V = 10;
+	double r_f_V = 0.1;
+	// phi
+	double k_xi_phi=1;
+	double i_xi_phi=0.05;
+
+
 
 	//desired values
 	double v_c = 100;
@@ -78,8 +88,14 @@ public:
 
 	void yaw_damper(double dt);
 
+	void roll_damper();
+
 	void hight_controller(double H_c, double V_c, double dt);
  
+	void phi_controller(double phi_c,double dt);
+
+	void curve_coordination();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -104,7 +120,13 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void set_h_c(double h);
+
+	UFUNCTION(BlueprintCallable)
+		void set_k_zeta_r(double k_zeta_r, double T);
 	
+	UFUNCTION(BlueprintCallable)
+		void set_k_xi_p(double k);
+
 	UFUNCTION(BlueprintCallable)
 		void set_orientation(double x6, double x7, double x8);
 
