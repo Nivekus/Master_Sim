@@ -3,7 +3,7 @@
 #pragma once
 
 #define _USE_MATH_DEFINES
-#define LOGGING true
+#define LOGGING false
 
 
 #include "CoreMinimal.h"
@@ -39,14 +39,15 @@ public:
 	//set intial conditions
 	double X[9];
 	double U[5];
-	double U_r[5] = {0,0,0,0,0};
+	double U_c[5] = { 0,0,0,0,0 };
+	double U_r[5] = { 0,0,0,0,0 };
 	double position[3];
 	double chi;
 
 
 	//for logging
-	FString str="";
-	
+	FString str = "";
+
 
 	//aircraft control parameter
 	// damper longitudinal
@@ -56,23 +57,23 @@ public:
 	double k_zeta_r = 15;
 	double T = 0.1;
 	double k_xi_p = 0.3;
+	// high pass filter (not working correctly)
+	double r_u_prev = 0;
+	double r_y_prev = 0;
+
 
 	//curve maneuver 
 	double k_zeta_beta = 20;
-
-
-	double r_u_prev;
-	double r_y_prev;
-
 	// height
 	double k_theta_H = 0.009;
-	double k_f_V = 0.01;
-	double r_f_V = 0.1;
+	// velocity
+	double k_f_V = 0.001;		//I
+	double r_f_V = 1;			//P
 	// phi
-	double k_xi_phi=1;
-	double i_xi_phi=0.05;
+	double k_xi_phi = 1;
+	double i_xi_phi = 0.05;
 	// chi
-	double k_phi_chi = 5;
+	double k_phi_chi = 3;
 
 
 
@@ -81,24 +82,27 @@ public:
 	double h_c = 500;
 	double phi_c = 0;
 	double chi_c = 0;
+	double theta_c = 0;
 
 	void calc_earth_velocity(const double v[3], double phi, double theta, double psi,
 		double y[3]);
 
 	void calc_chi(double v_x_e, double v_y_e);
-	
+
 	void calc_step(double dt);
 
 	void pitch_damper();
 
-	void phygoid_damper();
+	void phygoid_damper_theta_controller();
 
 	void yaw_damper(double dt);
 
 	void roll_damper();
 
-	void hight_controller(double dt);
- 
+	void hight_controller();
+
+	void velocity_controller(double dt);
+
 	void phi_controller(double dt);
 
 	void chi_controller();
@@ -138,7 +142,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void set_k_zeta_r(double k_zeta_r, double T);
-	
+
 	UFUNCTION(BlueprintCallable)
 		void set_k_xi_p(double k);
 
@@ -146,7 +150,7 @@ public:
 		void set_orientation(double x6, double x7, double x8);
 
 	UFUNCTION(BlueprintCallable)
-		void update_aircraft(double dt, double &x, double& y, double& z, double& phi, double& theta, double& psi);
+		void update_aircraft(double dt, double& x, double& y, double& z, double& phi, double& theta, double& psi);
 
 	UFUNCTION(BlueprintCallable)
 		void get_u_v_w(double& u, double& v, double& w);

@@ -26,14 +26,12 @@ ADrone::ADrone()
 
 	r_u_prev = X[5];
 	r_y_prev = 0;
-
 }
 
 // Called when the game starts or when spawned
 void ADrone::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 // Called every frame
@@ -57,17 +55,17 @@ void ADrone::get_u_v_w(double& u, double& v, double& w) {
 	w = X[2];
 }
 
-void ADrone::get_chi(double& chi_output){
+void ADrone::get_chi(double& chi_output) {
 	chi_output = chi;
 }
 
 
 void ADrone::get_U(double& u1, double& u2, double& u3, double& u4, double& u5) {
-	u1 = U[0] + U_r[0];
-	u2 = U[1] + U_r[1];
-	u3 = U[2] + U_r[2];
-	u4 = U[3] + U_r[3];
-	u5 = U[4] + U_r[4];
+	u1 =  U_c[0];
+	u2 =  U_c[1];
+	u3 =  U_c[2];
+	u4 =  U_c[3];
+	u5 =  U_c[4];
 }
 
 void ADrone::setU(double u0, double u1, double u2, double u3, double u4)
@@ -111,7 +109,6 @@ void ADrone::calc_step(double dt) {
 	double Xdot[9];
 
 	// calculate augmented control values U
-	double U_c[5];
 	U_c[0] = U[0] + U_r[0];
 	U_c[1] = U[1] + U_r[1];
 	U_c[2] = U[2] + U_r[2];
@@ -221,17 +218,20 @@ void ADrone::calc_chi(double v_x_e, double v_y_e) {
 
 void ADrone::update_aircraft(double dt, double& pos_x, double& pos_y, double& pos_z, double& phi, double& theta, double& psi) {
 	
-	// run before step for correct integrator initial values
-	hight_controller(dt);
-	phi_controller(dt);
+	pos_x = position[0];
+	pos_y = position[1];
+	pos_z = position[2];
+	phi = X[6];
+	theta = X[7];
+	psi = X[8];
+	
+	
 
+	// run before step for correct integrator initial values
+	phi_controller(dt);
+	velocity_controller(dt);
+	
 	if (LOGGING) {
-		pos_x = position[0];
-		pos_y = position[1];
-		pos_z = position[2];
-		phi = X[6];
-		theta = X[7];
-		psi = X[8];
 		str = str + FString::SanitizeFloat(pos_x)
 			+ " " + FString::SanitizeFloat(pos_y)
 			+ " " + FString::SanitizeFloat(pos_z)
@@ -265,12 +265,13 @@ void ADrone::update_aircraft(double dt, double& pos_x, double& pos_y, double& po
 	}
 
 
-	phygoid_damper();
+	phygoid_damper_theta_controller();
 	pitch_damper();
 	yaw_damper(dt);
 	roll_damper();
 	curve_coordination();
 	chi_controller();
+	hight_controller();
 }
 
 void ADrone::pitch_damper() {
@@ -281,22 +282,21 @@ void ADrone::roll_damper() {
 	U_r[0] += k_xi_p * X[3];
 }
 
-void ADrone::phygoid_damper() {
-	U_r[1] += k_eta_theta * X[7];
+void ADrone::phygoid_damper_theta_controller() {
+	U_r[1] += k_eta_theta * (X[7] - theta_c);
 }
 
-void ADrone::hight_controller(double dt) {
-	
+
+void ADrone::hight_controller() {
 	double H_error;
-	H_error = position[2] - h_c;
-	double theta_c = k_theta_H * H_error;
+	H_error = h_c - position[2];
+	theta_c = k_theta_H * H_error;
+
 	// limit max theta angle
-	theta_c = std::max(theta_c, -30 * M_PI / 180);
-	// theta_c = std::min(theta_c, 30 * M_PI / 180); //no limit
+	theta_c = std::min(theta_c, 30 * M_PI / 180);
+}
 
-	U_r[1] += k_eta_theta*theta_c;
-
-
+void ADrone::velocity_controller(double dt) {
 	// PI control
 	double V = std::sqrt(X[0] * X[0] + X[1] * X[1] + X[2] * X[2]);
 	double V_error = v_c - V;
@@ -307,8 +307,8 @@ void ADrone::hight_controller(double dt) {
 
 	U_r[3] += Iout + Pout;
 	U_r[4] += Iout + Pout;
-
 }
+
 
 void ADrone::phi_controller(double dt) {
 
@@ -327,15 +327,14 @@ void ADrone::phi_controller(double dt) {
 }
 
 void ADrone::chi_controller() {
-	phi_c = k_phi_chi*(chi_c - chi);
+	phi_c = k_phi_chi * (chi_c - chi);
 	// limit banking angle 
-	phi_c = std::max(phi_c, -30 * M_PI / 180);
-	phi_c = std::min(phi_c, 30 * M_PI / 180);
+	phi_c = std::max(phi_c, -50 * M_PI / 180);
+	phi_c = std::min(phi_c, 50 * M_PI / 180);
 }
 
-
 void ADrone::yaw_damper(double dt) {
-	
+
 	// high pass filter sT/(1+Ts)
 	double y_k;
 	double y_k_1 = r_y_prev;
@@ -346,19 +345,18 @@ void ADrone::yaw_damper(double dt) {
 	// update prev values 
 	r_y_prev = y_k;
 	r_u_prev = u_k;
-	
+
 	// P control
 	U_r[2] = k_zeta_r * y_k;
-//	U_r[2] += k_zeta_r * X[5];
+	//	U_r[2] += k_zeta_r * X[5];
 }
 
 void ADrone::curve_coordination() {
 	double V = std::sqrt(X[0] * X[0] + X[1] * X[1] + X[2] * X[2]);
 	double beta = asin(X[1] / V);
-	
+
 	U_r[2] -= k_zeta_beta * beta;
 }
-
 
 void ADrone::set_v_c(double v) {
 	this->v_c = v;
@@ -368,8 +366,8 @@ void ADrone::set_h_c(double h) {
 	this->h_c = h;
 }
 
-void ADrone::set_chi_c(double chi_input){
-	this->chi_c=chi_input;
+void ADrone::set_chi_c(double chi_input) {
+	this->chi_c = chi_input;
 }
 
 void ADrone::set_phi_c(double phi) {
