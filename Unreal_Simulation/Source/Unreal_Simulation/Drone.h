@@ -2,7 +2,7 @@
 
 #pragma once
 
-
+#define _USE_MATH_DEFINES
 #define LOGGING true
 
 
@@ -13,6 +13,8 @@
 #include <cstdlib>
 #include <sstream>
 #include <math.h>
+#include <algorithm>
+
 THIRD_PARTY_INCLUDES_START
 #pragma push_macro("check")
 #undef check
@@ -39,7 +41,7 @@ public:
 	double U[5];
 	double U_r[5] = {0,0,0,0,0};
 	double position[3];
-	
+	double chi;
 
 
 	//for logging
@@ -69,18 +71,23 @@ public:
 	// phi
 	double k_xi_phi=1;
 	double i_xi_phi=0.05;
+	// chi
+	double k_phi_chi = 5;
 
 
 
 	//desired values
 	double v_c = 100;
 	double h_c = 500;
+	double phi_c = 0;
+	double chi_c = 0;
 
-
-	void get_earth_velocity(const double v[3], double phi, double theta, double psi,
+	void calc_earth_velocity(const double v[3], double phi, double theta, double psi,
 		double y[3]);
+
+	void calc_chi(double v_x_e, double v_y_e);
 	
-	void calcStep(double dt);
+	void calc_step(double dt);
 
 	void pitch_damper();
 
@@ -90,9 +97,11 @@ public:
 
 	void roll_damper();
 
-	void hight_controller(double H_c, double V_c, double dt);
+	void hight_controller(double dt);
  
-	void phi_controller(double phi_c,double dt);
+	void phi_controller(double dt);
+
+	void chi_controller();
 
 	void curve_coordination();
 
@@ -122,6 +131,12 @@ public:
 		void set_h_c(double h);
 
 	UFUNCTION(BlueprintCallable)
+		void set_chi_c(double chi_input);
+
+	UFUNCTION(BlueprintCallable)
+		void set_phi_c(double phi);
+
+	UFUNCTION(BlueprintCallable)
 		void set_k_zeta_r(double k_zeta_r, double T);
 	
 	UFUNCTION(BlueprintCallable)
@@ -134,6 +149,12 @@ public:
 		void update_aircraft(double dt, double &x, double& y, double& z, double& phi, double& theta, double& psi);
 
 	UFUNCTION(BlueprintCallable)
-		void get_u_w_v(double& u, double& v, double& w);
+		void get_u_v_w(double& u, double& v, double& w);
+
+	UFUNCTION(BlueprintCallable)
+		void get_chi(double& chi_output);
+
+	UFUNCTION(BlueprintCallable)
+		void get_U(double& u1, double& u2, double& u3, double& u4, double& u5);
 
 };
