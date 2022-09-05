@@ -43,7 +43,7 @@ public:
 	double U_r[5] = { 0,0,0,0,0 };
 	double position[3];
 	double chi;
-
+	
 
 	//for logging
 	FString str = "";
@@ -68,21 +68,21 @@ public:
 	double k_theta_H = 0.009;
 	// velocity
 	double k_f_V = 0.001;		//I
-	double r_f_V = 1;			//P
+	double r_f_V = 1.0;			//P
 	// phi
-	double k_xi_phi = 1;
+	double k_xi_phi = 1.0;
 	double i_xi_phi = 0.05;
 	// chi
-	double k_phi_chi = 3;
+	double k_phi_chi = 3.0;
 
 
 
 	//desired values
-	double v_c = 100;
-	double h_c = 500;
-	double phi_c = 0;
-	double chi_c = 0;
-	double theta_c = 0;
+	double v_c = 10000000000;
+	double h_c = 10000000000;
+	double phi_c = 10000000000;
+	double chi_c = 10000000000;
+	double theta_c = 10000000000;
 
 	void calc_earth_velocity(const double v[3], double phi, double theta, double psi,
 		double y[3]);

@@ -26,6 +26,10 @@ ADrone::ADrone()
 
 	r_u_prev = X[5];
 	r_y_prev = 0;
+
+	v_c = std::sqrt(X[0] * X[0] + X[1] * X[1] + X[2] * X[2]);
+
+
 }
 
 // Called when the game starts or when spawned
@@ -89,12 +93,17 @@ void ADrone::setX0(double x0, double x1, double x2, double x3, double x4, double
 	X[7] = x7;
 	X[8] = x8;
 
+	v_c = std::sqrt(X[0] * X[0] + X[1] * X[1] + X[2] * X[2]);
 }
 
 void ADrone::set_orientation(double x6, double x7, double x8) {
 	X[6] = x6;
 	X[7] = x7;
 	X[8] = x8;
+
+	phi_c = x6;
+	chi_c = 0;
+	theta_c = x7;
 }
 
 
@@ -102,6 +111,7 @@ void ADrone::setposition(double x, double y, double z) {
 	position[0] = x;
 	position[1] = y;
 	position[2] = z;
+	h_c = z;
 }
 
 
