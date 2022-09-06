@@ -50,6 +50,7 @@ ADrone::ADrone()
 
 	calc_earth_velocity(v, X[6], X[7], X[8], y);
 	calc_chi(y[0], y[1]);
+	chi_c = chi;
 
 
 }
@@ -126,7 +127,7 @@ void ADrone::setX0(double x0, double x1, double x2, double x3, double x4, double
 
 	calc_earth_velocity(v, X[6], X[7], X[8], y);
 	calc_chi(y[0], y[1]);
-
+	chi_c = chi;
 }
 
 void ADrone::set_orientation(double x6, double x7, double x8) {
@@ -135,8 +136,20 @@ void ADrone::set_orientation(double x6, double x7, double x8) {
 	X[8] = x8;
 
 	phi_c = x6;
-	chi_c = 0;
 	theta_c = x7;
+
+	double v[3];
+	double y[3];
+
+	v[0] = X[0];
+	v[1] = X[1];
+	v[2] = X[2];
+
+	calc_earth_velocity(v, X[6], X[7], X[8], y);
+	calc_chi(y[0], y[1]);
+	chi_c = chi;
+
+
 }
 
 
