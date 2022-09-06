@@ -3,6 +3,18 @@
 
 #include "Drone.h"
 
+
+std::array<double,3> matmul3x3(std::array<std::array<double,3>,3> m, std::array<double,3> v) {
+	std::array<double, 3> res = {0,0,0};
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			res[i] += m[i][j] * v[j];
+		}
+	}
+	return res;
+};
+
+
 // Sets default values
 ADrone::ADrone()
 {
@@ -171,7 +183,9 @@ void ADrone::calc_step(double dt) {
 
 }
 
-void ADrone::calc_earth_velocity(const double v[3], double phi, double theta, double psi,
+
+//not used anymore
+void ADrone::calc_earth_velocity_matlab(const double v[3], double phi, double theta, double psi,
 	double y[3])
 {
 	static const signed char iv[3] = { 0, 0, 1 };
@@ -243,6 +257,45 @@ void ADrone::calc_earth_velocity(const double v[3], double phi, double theta, do
 	y[2] = -y[2];
 }
 
+void ADrone::calc_earth_velocity( double v[3], double phi, double theta, double psi,
+	double y[3])
+{
+	double cos_phi_tmp = std::cos(phi);
+	double sin_phi_tmp = std::sin(phi);
+
+	double cos_theta_tmp = std::cos(theta);
+	double sin_theta_tmp = std::sin(theta);
+
+	double cos_psi_tmp = std::cos(psi);
+	double sin_psi_tmp = std::sin(psi);
+
+	std::array<std::array<double, 3>, 3> rpsi_t = {	cos_psi_tmp,-sin_psi_tmp,0,
+							sin_psi_tmp,cos_psi_tmp,0,
+							0,0,1 };
+
+	std::array<std::array<double, 3>, 3> rtheta_t = { cos_theta_tmp,0,sin_theta_tmp,
+							0,1,0,
+							-sin_theta_tmp,0,cos_theta_tmp };
+
+	std::array<std::array<double, 3>, 3> rphi_t = { 1,0,0,
+							0,cos_phi_tmp,-sin_phi_tmp,
+							0,sin_phi_tmp,cos_phi_tmp };
+
+
+	std::array<double, 3> res,v_tmp;
+
+	v_tmp[0] = v[0];
+	v_tmp[1] = v[1];
+	v_tmp[2] = v[2];
+
+	res = matmul3x3(rphi_t, v_tmp);
+	res = matmul3x3(rtheta_t, res);
+	res = matmul3x3(rpsi_t, res);
+
+	y[0] = res[0];
+	y[1] = res[1];
+	y[2] = -res[2];
+}
 
 
 

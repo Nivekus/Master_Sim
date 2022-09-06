@@ -14,6 +14,7 @@
 #include <sstream>
 #include <math.h>
 #include <algorithm>
+#include <array>
 
 THIRD_PARTY_INCLUDES_START
 #pragma push_macro("check")
@@ -84,7 +85,10 @@ public:
 	double chi_c = 10000000000;
 	double theta_c = 10000000000;
 
-	void calc_earth_velocity(const double v[3], double phi, double theta, double psi,
+	void calc_earth_velocity_matlab(const double v[3], double phi, double theta, double psi,
+		double y[3]);
+
+	void calc_earth_velocity( double v[3], double phi, double theta, double psi,
 		double y[3]);
 
 	void calc_chi(double v_x_e, double v_y_e);

@@ -4,8 +4,6 @@ function y = getposition(v,phi,theta,psi)
     x8 = theta;
     x9 = psi;
 
-
-
     Rpsi = [cos(x9) sin(x9) 0;
             -sin(x9) cos(x9) 0;
             0 0 1];
@@ -20,6 +18,7 @@ function y = getposition(v,phi,theta,psi)
             
     R = Rphi * Rtheta * Rpsi;
 
+    
     y = R' * v;
     y(3) = -y(3);
    
