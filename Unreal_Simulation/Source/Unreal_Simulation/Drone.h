@@ -43,7 +43,7 @@ public:
 	double U_r[5] = { 0,0,0,0,0 };
 	double position[3];
 	double chi;
-	
+
 
 	//for logging
 	FString str = "";
@@ -88,6 +88,8 @@ public:
 		double y[3]);
 
 	void calc_chi(double v_x_e, double v_y_e);
+
+	double calc_chi_error();
 
 	void calc_step(double dt);
 

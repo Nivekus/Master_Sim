@@ -29,6 +29,16 @@ ADrone::ADrone()
 
 	v_c = std::sqrt(X[0] * X[0] + X[1] * X[1] + X[2] * X[2]);
 
+	double v[3];
+	double y[3];
+
+	v[0] = X[0];
+	v[1] = X[1];
+	v[2] = X[2];
+
+	calc_earth_velocity(v, X[6], X[7], X[8], y);
+	calc_chi(y[0], y[1]);
+
 
 }
 
@@ -94,6 +104,17 @@ void ADrone::setX0(double x0, double x1, double x2, double x3, double x4, double
 	X[8] = x8;
 
 	v_c = std::sqrt(X[0] * X[0] + X[1] * X[1] + X[2] * X[2]);
+
+	double v[3];
+	double y[3];
+
+	v[0] = X[0];
+	v[1] = X[1];
+	v[2] = X[2];
+
+	calc_earth_velocity(v, X[6], X[7], X[8], y);
+	calc_chi(y[0], y[1]);
+
 }
 
 void ADrone::set_orientation(double x6, double x7, double x8) {
@@ -222,9 +243,8 @@ void ADrone::calc_earth_velocity(const double v[3], double phi, double theta, do
 	y[2] = -y[2];
 }
 
-void ADrone::calc_chi(double v_x_e, double v_y_e) {
-	chi = M_PI / 2 - std::atan2(v_x_e, v_y_e);
-}
+
+
 
 void ADrone::update_aircraft(double dt, double& pos_x, double& pos_y, double& pos_z, double& phi, double& theta, double& psi) {
 	
@@ -337,11 +357,29 @@ void ADrone::phi_controller(double dt) {
 }
 
 void ADrone::chi_controller() {
-	phi_c = k_phi_chi * (chi_c - chi);
+
+	double error;
+	error = calc_chi_error();
+	phi_c = k_phi_chi * error;
 	// limit banking angle 
 	phi_c = std::max(phi_c, -50 * M_PI / 180);
 	phi_c = std::min(phi_c, 50 * M_PI / 180);
 }
+
+void ADrone::calc_chi(double v_x_e, double v_y_e) {
+	chi = M_PI / 2 - std::atan2(v_x_e, v_y_e);
+}
+
+double ADrone::calc_chi_error() {
+	double error = std::fmod(-chi + chi_c + M_PI, 2*M_PI);
+	if (error < 0) {
+		error += 2 * M_PI;
+	}
+	return error - M_PI;
+
+};
+
+
 
 void ADrone::yaw_damper(double dt) {
 
