@@ -163,6 +163,7 @@ void ADrone::setposition(double x, double y, double z) {
 
 void ADrone::calc_step(double dt) {
 	double Xdot[9];
+	double Xdot2[9];
 
 	// calculate augmented control values U
 	U_c[0] = U[0] + U_r[0];
@@ -171,7 +172,14 @@ void ADrone::calc_step(double dt) {
 	U_c[3] = U[3] + U_r[3];
 	U_c[4] = U[4] + U_r[4];
 
-	dynamics->aircraft_model(X, U_c, Xdot);
+	dynamics.aircraft_model(X, U_c, Xdot);
+	dynamics_custom.aircraft_model(X, U_c, Xdot2);
+	
+	for (int i = 0; i < 9; i++) {
+		check(std::abs(Xdot[i] - Xdot2[i]) < std::numeric_limits<double>::epsilon());
+	}
+	
+	//assert(Xdot == Xdot2);
 
 	//euler 
 	for (int i = 0; i < 9; i++) {

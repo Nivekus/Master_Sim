@@ -16,11 +16,13 @@
 #include <algorithm>
 #include <array>
 
+
 THIRD_PARTY_INCLUDES_START
 #pragma push_macro("check")
 #undef check
 #include <boost/numeric/odeint.hpp>
 #include <aircraft_dynamics.h>
+#include <aircraft_dynamics_custom.h>
 #pragma pop_macro("check")
 THIRD_PARTY_INCLUDES_END
 #include "Drone.generated.h"
@@ -34,8 +36,8 @@ class UNREAL_SIMULATION_API ADrone : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ADrone();
-	aircraft_dynamics* dynamics;
-
+	aircraft_dynamics dynamics;
+	aircraft_dynamics_custom dynamics_custom;
 
 	//set intial conditions
 	double X[9];
@@ -74,7 +76,7 @@ public:
 	double k_xi_phi = 1.0;
 	double i_xi_phi = 0.05;
 	// chi
-	double k_phi_chi = 3.0;
+	double k_phi_chi = 2.0;
 
 
 
