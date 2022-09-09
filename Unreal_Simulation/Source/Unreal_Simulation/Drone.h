@@ -22,7 +22,7 @@ THIRD_PARTY_INCLUDES_START
 #undef check
 #include <boost/numeric/odeint.hpp>
 //#include <aircraft_dynamics.h>
-#include <aircraft_dynamics_custom.h>
+#include <aircraft_dynamics.h>
 #pragma pop_macro("check")
 THIRD_PARTY_INCLUDES_END
 #include "Drone.generated.h"
@@ -36,7 +36,10 @@ class UNREAL_SIMULATION_API ADrone : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ADrone();
-	aircraft_dynamics_custom dynamics;
+	aircraft_dynamics dynamics;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Test)
+		uint32 test : 1;
 
 protected:
 	// Called when the game starts or when spawned

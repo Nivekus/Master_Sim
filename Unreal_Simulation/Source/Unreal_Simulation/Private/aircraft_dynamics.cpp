@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "aircraft_dynamics_custom.h"
+#include "aircraft_dynamics.h"
 
 
 template <typename Type, std::size_t... sizes>
@@ -68,18 +68,18 @@ std::array<double, 3> cross(const std::array<double, 3>  &a, const  std::array<d
 };
 
 
-aircraft_dynamics_custom::aircraft_dynamics_custom()
+aircraft_dynamics::aircraft_dynamics()
 {
 	X = {85,0,0,0,0,0,0,0.1,0};
 	U = { 0,-0.1,0,0.08,0.08 };
 	v_c = std::sqrt(X[0] * X[0] + X[1] * X[1] + X[2] * X[2]);
 }
 
-aircraft_dynamics_custom::~aircraft_dynamics_custom()
+aircraft_dynamics::~aircraft_dynamics()
 {
 }
 
-void aircraft_dynamics_custom::aircraft_model(const double x[9], const double u[5], double xdot[9]) {
+void aircraft_dynamics::aircraft_model(const double x[9], const double u[5], double xdot[9]) {
 	std::array<double, 9> x_tmp = { x[0],x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8] };
 	std::array<double, 5> u_tmp = { u[0],u[1], u[2], u[3], u[4]};
 	std::array<double, 9> x_dot_tmp = { u[0],u[1], u[2], u[3], u[4] };
@@ -100,7 +100,7 @@ void aircraft_dynamics_custom::aircraft_model(const double x[9], const double u[
 
 }
 
-void aircraft_dynamics_custom::aircraft_model(const std::array<double, 9> &x, const std::array<double, 5> &u, std::array<double, 9> &xdot) {
+void aircraft_dynamics::aircraft_model(const std::array<double, 9> &x, const std::array<double, 5> &u, std::array<double, 9> &xdot) {
 	// intermediat variables----------------------------------------------------------- 
 	double Va = std::sqrt(std::pow(x[0], 2.0) + std::pow(x[1], 2.0) + std::pow(x[2], 2.0));
 	double alpha = std::atan2(x[2], x[0]);
@@ -210,7 +210,7 @@ void aircraft_dynamics_custom::aircraft_model(const std::array<double, 9> &x, co
 
 }
 
-void aircraft_dynamics_custom::limit_u( std::array<double, 5> &u) {
+void aircraft_dynamics::limit_u( std::array<double, 5> &u) {
 	if (u[0] > u1max)
 	{
 		u[0] = u1max;
@@ -258,7 +258,7 @@ void aircraft_dynamics_custom::limit_u( std::array<double, 5> &u) {
 };
 
 
-void aircraft_dynamics_custom::calc_earth_velocity(double v[3], double phi, double theta, double psi,
+void aircraft_dynamics::calc_earth_velocity(double v[3], double phi, double theta, double psi,
 	double y[3]) 
 {
 	std::array<double, 3> v_tmp = {v[0],v[1],v[2]};
@@ -273,7 +273,7 @@ void aircraft_dynamics_custom::calc_earth_velocity(double v[3], double phi, doub
 };
 
 
-void aircraft_dynamics_custom::calc_earth_velocity(const std::array<double, 3> &v, const std::array<double, 3> &euler, std::array<double, 3> &earth_velo)
+void aircraft_dynamics::calc_earth_velocity(const std::array<double, 3> &v, const std::array<double, 3> &euler, std::array<double, 3> &earth_velo)
 {
 	double cos_phi_tmp = std::cos(euler[0]);
 	double sin_phi_tmp = std::sin(euler[0]);
@@ -311,7 +311,7 @@ void aircraft_dynamics_custom::calc_earth_velocity(const std::array<double, 3> &
 	earth_velo[2] = -res[2];
 }
 
-void aircraft_dynamics_custom::calc_step(const double &dt) {
+void aircraft_dynamics::calc_step(const double &dt) {
 	
 	std::array<double,9> Xdot;
 	// calculate augmented control values U
@@ -335,7 +335,7 @@ void aircraft_dynamics_custom::calc_step(const double &dt) {
 	calc_chi(velo_earth[0], velo_earth[1]);
 }
 
-void aircraft_dynamics_custom::calc_controlled_step(const double &dt, double& pos_x, double& pos_y, double& pos_z, double& phi, double& theta, double& psi){
+void aircraft_dynamics::calc_controlled_step(const double &dt, double& pos_x, double& pos_y, double& pos_z, double& phi, double& theta, double& psi){
 
 
 	calc_step(dt);
@@ -367,17 +367,17 @@ void aircraft_dynamics_custom::calc_controlled_step(const double &dt, double& po
 
 
 
-void aircraft_dynamics_custom::solve_euler(double dt, const std::array<double, 9>& x_dot, std::array<double, 9>& x) {
+void aircraft_dynamics::solve_euler(double dt, const std::array<double, 9>& x_dot, std::array<double, 9>& x) {
 	for (int i = 0; i < 9; i++) {
 		x[i] += dt * x_dot[i];
 	}
 };
 
-void aircraft_dynamics_custom::calc_chi(double x, double y) {
+void aircraft_dynamics::calc_chi(double x, double y) {
 	chi = M_PI / 2 - std::atan2(x, y);
 }
 
-void aircraft_dynamics_custom::set_initial_cond(std::array<double, 9> x_init, std::array<double, 5> u_init, std::array<double, 3> position_init)
+void aircraft_dynamics::set_initial_cond(std::array<double, 9> x_init, std::array<double, 5> u_init, std::array<double, 3> position_init)
 {
 	X = x_init;
 	U = u_init;
@@ -395,11 +395,11 @@ void aircraft_dynamics_custom::set_initial_cond(std::array<double, 9> x_init, st
 	chi_c=chi;
 }
 
-void aircraft_dynamics_custom::set_position(std::array<double, 3> position_init) {
+void aircraft_dynamics::set_position(std::array<double, 3> position_init) {
 	position = position_init;
 	h_c = position_init[2];
 };
-void aircraft_dynamics_custom::set_orientation(std::array<double, 3> orientation_init) {
+void aircraft_dynamics::set_orientation(std::array<double, 3> orientation_init) {
 	X[6] = orientation_init[0];
 	X[7] = orientation_init[1];
 	X[8] = orientation_init[2];

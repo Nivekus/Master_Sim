@@ -11,24 +11,10 @@
 
 #include "CoreMinimal.h"
 
-/**
- *
- */
 
-
-
-
-
-
-
-
-class UNREAL_SIMULATION_API aircraft_dynamics_custom
+class UNREAL_SIMULATION_API aircraft_dynamics 
 {
 	aircraft_controller controller;
-
-	
-
-
 
 public:
 	std::array<double, 9> X;				//current states
@@ -38,8 +24,8 @@ public:
 	double chi;								//current heading
 	std::array<double, 3> position;			//current position in earth coordinates
 	
-	aircraft_dynamics_custom();
-	~aircraft_dynamics_custom();
+	aircraft_dynamics();
+	~aircraft_dynamics();
 
 
 	double v_c;								//
