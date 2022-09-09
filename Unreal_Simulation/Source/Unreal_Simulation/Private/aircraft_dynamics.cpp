@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "aircraft_dynamics_custom.h"
+#include "aircraft_dynamics.h"
 
 
 template <typename Type, std::size_t... sizes>
@@ -15,7 +15,7 @@ auto concatenate(const std::array<Type, sizes>&... arrays)
 	return result;
 }
 
-std::array<double, 3> matmulvec3x3(std::array<std::array<double, 3>, 3> m, std::array<double, 3> v) {
+std::array<double, 3> matmulvec3x3(const std::array<std::array<double, 3>, 3> &m, const  std::array<double, 3> &v) {
 	std::array<double, 3> res = { 0,0,0 };
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
@@ -25,7 +25,7 @@ std::array<double, 3> matmulvec3x3(std::array<std::array<double, 3>, 3> m, std::
 	return res;
 };
 
-std::array<std::array<double, 3>, 3> matmulscal3x3(std::array<std::array<double, 3>, 3> m, double v) {
+std::array<std::array<double, 3>, 3> matmulscal3x3(const std::array<std::array<double, 3>, 3> &m, const  double &v) {
 	std::array<std::array<double, 3>, 3> res;
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
@@ -35,7 +35,7 @@ std::array<std::array<double, 3>, 3> matmulscal3x3(std::array<std::array<double,
 	return res;
 };
 
-std::array<double, 3> vecaddvec3x1(std::array<double, 3>  m, std::array<double, 3>  v) {
+std::array<double, 3> vecaddvec3x1(const std::array<double, 3>  &m, const  std::array<double, 3>  &v) {
 	std::array<double, 3>  res;
 	for (int i = 0; i < 3; i++) {
 		res[i] = m[i] + v[i];
@@ -43,7 +43,7 @@ std::array<double, 3> vecaddvec3x1(std::array<double, 3>  m, std::array<double, 
 	return res;
 };
 
-std::array<double, 3> vecsubvec3x1(std::array<double, 3>  m, std::array<double, 3>  v) {
+std::array<double, 3> vecsubvec3x1(const std::array<double, 3>  &m, const  std::array<double, 3>  &v) {
 	std::array<double, 3>  res;
 	for (int i = 0; i < 3; i++) {
 		res[i] = m[i] - v[i];
@@ -51,7 +51,7 @@ std::array<double, 3> vecsubvec3x1(std::array<double, 3>  m, std::array<double, 
 	return res;
 };
 
-std::array<double, 3> vecmulscal3x1(std::array<double, 3>  m, double  v) {
+std::array<double, 3> vecmulscal3x1(const std::array<double, 3>  &m, const  double  &v) {
 	std::array<double, 3>  res;
 	for (int i = 0; i < 3; i++) {
 		res[i] = m[i] * v;
@@ -59,7 +59,7 @@ std::array<double, 3> vecmulscal3x1(std::array<double, 3>  m, double  v) {
 	return res;
 };
 
-std::array<double, 3> cross(std::array<double, 3>  a, std::array<double, 3>   b) {
+std::array<double, 3> cross(const std::array<double, 3>  &a, const  std::array<double, 3>   &b) {
 	std::array<double, 3>  res;
 	res[0] = a[1] * b[2] - a[2] * b[1];
 	res[1] = a[2] * b[0] - a[0] * b[2];
@@ -68,15 +68,18 @@ std::array<double, 3> cross(std::array<double, 3>  a, std::array<double, 3>   b)
 };
 
 
-aircraft_dynamics_custom::aircraft_dynamics_custom()
+aircraft_dynamics::aircraft_dynamics()
+{
+	X = {85,0,0,0,0,0,0,0.1,0};
+	U = { 0,-0.1,0,0.08,0.08 };
+	v_c = std::sqrt(X[0] * X[0] + X[1] * X[1] + X[2] * X[2]);
+}
+
+aircraft_dynamics::~aircraft_dynamics()
 {
 }
 
-aircraft_dynamics_custom::~aircraft_dynamics_custom()
-{
-}
-
-void aircraft_dynamics_custom::aircraft_model(const double x[9], const double u[5], double xdot[9]) {
+void aircraft_dynamics::aircraft_model(const double x[9], const double u[5], double xdot[9]) {
 	std::array<double, 9> x_tmp = { x[0],x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8] };
 	std::array<double, 5> u_tmp = { u[0],u[1], u[2], u[3], u[4]};
 	std::array<double, 9> x_dot_tmp = { u[0],u[1], u[2], u[3], u[4] };
@@ -97,7 +100,7 @@ void aircraft_dynamics_custom::aircraft_model(const double x[9], const double u[
 
 }
 
-void aircraft_dynamics_custom::aircraft_model(const std::array<double, 9> x, const std::array<double, 5> u, std::array<double, 9>& xdot) {
+void aircraft_dynamics::aircraft_model(const std::array<double, 9> &x, const std::array<double, 5> &u, std::array<double, 9> &xdot) {
 	// intermediat variables----------------------------------------------------------- 
 	double Va = std::sqrt(std::pow(x[0], 2.0) + std::pow(x[1], 2.0) + std::pow(x[2], 2.0));
 	double alpha = std::atan2(x[2], x[0]);
@@ -207,7 +210,7 @@ void aircraft_dynamics_custom::aircraft_model(const std::array<double, 9> x, con
 
 }
 
-void aircraft_dynamics_custom::limit_u( std::array<double, 5> &u) {
+void aircraft_dynamics::limit_u( std::array<double, 5> &u) {
 	if (u[0] > u1max)
 	{
 		u[0] = u1max;
@@ -218,8 +221,8 @@ void aircraft_dynamics_custom::limit_u( std::array<double, 5> &u) {
 	}
 
 	if (u[1] > u2max)
-	{		u[1] = u2max;
-
+	{	
+		u[1] = u2max;
 	}	
 	else if (u[1] < u2min)
 	{
@@ -254,3 +257,160 @@ void aircraft_dynamics_custom::limit_u( std::array<double, 5> &u) {
 	}
 };
 
+
+void aircraft_dynamics::calc_earth_velocity(double v[3], double phi, double theta, double psi,
+	double y[3]) 
+{
+	std::array<double, 3> v_tmp = {v[0],v[1],v[2]};
+	std::array<double, 3> euler = { phi,theta,psi };
+	std::array<double, 3> earth_velo = { 0,0,0 };
+	calc_earth_velocity(v_tmp, euler, earth_velo);
+	
+	y[0] = earth_velo[0];
+	y[1] = earth_velo[1];
+	y[2] = earth_velo[2];
+
+};
+
+
+void aircraft_dynamics::calc_earth_velocity(const std::array<double, 3> &v, const std::array<double, 3> &euler, std::array<double, 3> &earth_velo)
+{
+	double cos_phi_tmp = std::cos(euler[0]);
+	double sin_phi_tmp = std::sin(euler[0]);
+
+	double cos_theta_tmp = std::cos(euler[1]);
+	double sin_theta_tmp = std::sin(euler[1]);
+
+	double cos_psi_tmp = std::cos(euler[2]);
+	double sin_psi_tmp = std::sin(euler[2]);
+
+	std::array<std::array<double, 3>, 3> rpsi_t = { cos_psi_tmp,	-sin_psi_tmp,	0,
+													sin_psi_tmp,	cos_psi_tmp,	0,
+													0,				0,				1 };
+
+	std::array<std::array<double, 3>, 3> rtheta_t = {	cos_theta_tmp,	0,	sin_theta_tmp,
+														0,				1,	0,
+														-sin_theta_tmp,	0,	cos_theta_tmp };
+
+	std::array<std::array<double, 3>, 3> rphi_t = { 1,			0,				0,
+													0,			cos_phi_tmp,	-sin_phi_tmp,
+													0,			sin_phi_tmp,	cos_phi_tmp };
+
+
+	std::array<double, 3> res, v_tmp;
+	v_tmp[0] = v[0];
+	v_tmp[1] = v[1];
+	v_tmp[2] = v[2];
+
+	res = matmulvec3x3(rphi_t, v_tmp);
+	res = matmulvec3x3(rtheta_t, res);
+	res = matmulvec3x3(rpsi_t, res);
+
+	earth_velo[0] = res[0];
+	earth_velo[1] = res[1];
+	earth_velo[2] = -res[2];
+}
+
+void aircraft_dynamics::calc_step(const double &dt) {
+	
+	std::array<double,9> Xdot;
+	// calculate augmented control values U
+	for (int i = 0; i < 5; i++) {
+		U_c[i] = U[i] + U_r[i];
+	}
+
+	limit_u(U_c);
+	aircraft_model(X, U_c, Xdot);
+	solve_euler(dt, Xdot, X);
+
+	//calculate position
+	std::array<double, 3> velo_aircraft = { X[0],X[1],X[2] };
+	std::array<double, 3> euler_angles = { X[6],X[7],X[8] };
+	std::array<double, 3> velo_earth = { 0,0,0 };
+	calc_earth_velocity(velo_aircraft,euler_angles,velo_earth);
+	for (int i = 0; i < 3; i++) {
+		position[i] += dt * velo_earth[i];
+	}
+	// calculate heading
+	calc_chi(velo_earth[0], velo_earth[1]);
+}
+
+void aircraft_dynamics::calc_controlled_step(const double &dt, double& pos_x, double& pos_y, double& pos_z, double& phi, double& theta, double& psi){
+
+
+	calc_step(dt);
+
+	//reset control values
+	for (int i = 0; i < 5; i++) {
+		U_r[i] = 0;
+	}
+
+	// run before step for correct integrator initial values
+	//controller.yaw_damper(dt,X,U_r);
+
+	controller.velocity_controller(dt, X, v_c, U_r);
+	controller.hight_controller(position[2], U_r, h_c, theta_c);
+	controller.phygoid_damper_theta_controller(X, theta_c, U_r);
+	controller.pitch_damper(X,U_r);
+	controller.roll_damper(X,U_r);
+	controller.curve_coordination(X,U_r);
+	controller.chi_controller(chi,U_r,chi_c,phi_c);
+	controller.phi_controller(dt, X, phi_c, U_r);
+
+	pos_x = position[0];
+	pos_y = position[1];
+	pos_z = position[2];
+	phi = X[6];
+	theta = X[7];
+	psi = X[8];
+}
+
+
+
+void aircraft_dynamics::solve_euler(double dt, const std::array<double, 9>& x_dot, std::array<double, 9>& x) {
+	for (int i = 0; i < 9; i++) {
+		x[i] += dt * x_dot[i];
+	}
+};
+
+void aircraft_dynamics::calc_chi(double x, double y) {
+	chi = M_PI / 2 - std::atan2(x, y);
+}
+
+void aircraft_dynamics::set_initial_cond(std::array<double, 9> x_init, std::array<double, 5> u_init, std::array<double, 3> position_init)
+{
+	X = x_init;
+	U = u_init;
+	position = position_init;
+	v_c = std::sqrt(X[0] * X[0] + X[1] * X[1] + X[2] * X[2]);							//
+	h_c = position_init[2];
+	phi_c = X[6];
+	theta_c = X[7];
+
+	std::array<double, 3> velo_aircraft = { X[0],X[1],X[2] };
+	std::array<double, 3> euler_angles = { X[6],X[7],X[8] };
+	std::array<double, 3> velo_earth = { 0,0,0 };
+	calc_earth_velocity(velo_aircraft, euler_angles, velo_earth);
+	calc_chi(velo_earth[0], velo_earth[1]);
+	chi_c=chi;
+}
+
+void aircraft_dynamics::set_position(std::array<double, 3> position_init) {
+	position = position_init;
+	h_c = position_init[2];
+};
+void aircraft_dynamics::set_orientation(std::array<double, 3> orientation_init) {
+	X[6] = orientation_init[0];
+	X[7] = orientation_init[1];
+	X[8] = orientation_init[2];
+	
+	phi_c = orientation_init[0];
+	theta_c = orientation_init[1];
+
+	std::array<double, 3> velo_aircraft = { X[0],X[1],X[2] };
+	std::array<double, 3> euler_angles = { X[6],X[7],X[8] };
+	std::array<double, 3> velo_earth = { 0,0,0 };
+	calc_earth_velocity(velo_aircraft, euler_angles, velo_earth);
+	calc_chi(velo_earth[0], velo_earth[1]);
+	chi_c = chi;
+};
