@@ -8,7 +8,7 @@ public class Unreal_Simulation : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Boost", "DynamicsModel" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Boost" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
         bEnableUndefinedIdentifierWarnings = false;

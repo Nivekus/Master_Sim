@@ -37,6 +37,9 @@ void ADrone::BeginPlay()
 	dynamics.v_c = std::sqrt( dynamics.X[0] * dynamics.X[0] 
 							+ dynamics.X[1] * dynamics.X[1] 
 							+ dynamics.X[2] * dynamics.X[2]);
+
+	//loads UE5 overwritten control parameters
+	set_control_values();
 }
 
 // Called every frame
@@ -149,10 +152,15 @@ void ADrone::set_phi_c(double phi) {
 	dynamics.phi_c = phi;
 }
 
-void ADrone::set_k_zeta_r(double k, double t) {
-	double k_zeta_r = k;
-	double T = t;
+void ADrone::set_control_values() {
+	dynamics.controller.k_eta_q = k_eta_q;
+	dynamics.controller.k_xi_p = k_xi_p;
+	dynamics.controller.k_eta_theta = k_eta_theta;
+	dynamics.controller.k_theta_H = k_theta_H;
+	dynamics.controller.r_f_V = r_f_V;
+	dynamics.controller.k_f_V = k_f_V;
+	dynamics.controller.k_xi_phi = k_xi_phi;
+	dynamics.controller.i_xi_phi = i_xi_phi;
+	dynamics.controller.k_phi_chi = k_phi_chi;
+	dynamics.controller.k_zeta_beta = k_zeta_beta;
 }
-void ADrone::set_k_xi_p(double k) {
-	double k_xi_p = k;
-};

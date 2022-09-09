@@ -11,6 +11,11 @@
  */
 class UNREAL_SIMULATION_API aircraft_controller
 {
+
+	double p_controller(const double& k, const double& error);
+	double pi_controller(const double& k, const double& r, const double& error, double& integral, const double& dt);
+
+public:
 	//aircraft control parameter
 	// damper longitudinal
 	double k_eta_q = 5;
@@ -42,10 +47,6 @@ class UNREAL_SIMULATION_API aircraft_controller
 	double velocity_integral = 0;
 
 
-	double p_controller(const double& k, const double& error);
-	double pi_controller(const double& k, const double& r, const double& error, double& integral, const double& dt);
-
-public:
 	aircraft_controller();
 	~aircraft_controller();
 
