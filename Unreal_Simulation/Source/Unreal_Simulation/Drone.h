@@ -36,8 +36,8 @@ class UNREAL_SIMULATION_API ADrone : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ADrone();
-	aircraft_dynamics dynamics;
-	aircraft_dynamics_custom dynamics_custom;
+	//aircraft_dynamics dynamics;
+	aircraft_dynamics_custom dynamics;
 
 	//set intial conditions
 	double X[9];
@@ -87,12 +87,6 @@ public:
 	double chi_c = 10000000000;
 	double theta_c = 10000000000;
 
-	void calc_earth_velocity_matlab(const double v[3], double phi, double theta, double psi,
-		double y[3]);
-
-	void calc_earth_velocity( double v[3], double phi, double theta, double psi,
-		double y[3]);
-
 	void calc_chi(double v_x_e, double v_y_e);
 
 	double calc_chi_error();
@@ -135,7 +129,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void setX0(double x0, double x1, double x2, double x3, double x4, double x5, double x6, double x7, double x8);
-
+	
 	UFUNCTION(BlueprintCallable)
 		void set_v_c(double v);
 
