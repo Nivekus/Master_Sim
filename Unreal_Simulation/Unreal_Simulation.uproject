@@ -24,6 +24,10 @@
 		{
 			"Name": "Boost",
 			"Enabled": false
+		},
+		{
+			"Name": "DynamicsModel",
+			"Enabled": false
 		}
 	]
 }

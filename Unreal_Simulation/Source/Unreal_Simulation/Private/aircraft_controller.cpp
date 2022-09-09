@@ -38,21 +38,13 @@ void aircraft_controller::hight_controller(const double &h, std::array<double, 5
 	double H_error;
 	H_error = h_c - h;
 	theta_c = k_theta_H * H_error;
-
 	// limit max theta angle
 	theta_c = std::min(theta_c, 30 * M_PI / 180);
 }
 
 void aircraft_controller::velocity_controller(const double& dt, const std::array<double, 9> &X, const double& v_c, std::array<double, 5>& U_r) {
-	// PI control
 	double V = std::sqrt(X[0] * X[0] + X[1] * X[1] + X[2] * X[2]);
 	double V_error = v_c - V;
-	//pi_controller(r_f_V, k_f_V, V_error);
-	
-	//double Pout = r_f_V * V_error;
-	//static double V_integral = 0;
-	//V_integral += V_error * dt;
-	//double Iout = k_f_V * V_integral;
 	double tmp = pi_controller(r_f_V, k_f_V, V_error,velocity_integral, dt);
 	U_r[3] += tmp;
 	U_r[4] += tmp;
@@ -83,6 +75,8 @@ double aircraft_controller::calc_chi_error(const double& chi, const double& chi_
 
 };
 
+
+// not working as intended 
 void aircraft_controller::yaw_damper(const double& dt,const std::array<double, 9>& X, std::array<double, 5>& U_r) {
 
 	// high pass filter sT/(1+Ts)
