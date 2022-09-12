@@ -75,7 +75,6 @@ double aircraft_controller::calc_chi_error(const double& chi, const double& chi_
 
 };
 
-
 // not working as intended 
 void aircraft_controller::yaw_damper(const double& dt,const std::array<double, 9>& X, std::array<double, 5>& U_r) {
 
@@ -99,4 +98,16 @@ void aircraft_controller::curve_coordination(const std::array<double, 9>& X, std
 	double V = std::sqrt(X[0] * X[0] + X[1] * X[1] + X[2] * X[2]);
 	double beta = asin(X[1] / V);
 	U_r[2] -= p_controller(k_zeta_beta,beta);
+}
+
+double aircraft_controller::calc_chi_c(double dx, double dy) {
+	double chi_c = atan2(dx, dy);
+	return chi_c;
+}
+
+
+void aircraft_controller::waypoint_control(const std::array<double, 3>& position, const std::array<double, 3>& way_point, double& chi_c) {
+	double dx = way_point[0] - position[0];
+	double dy = way_point[1] - position[1];
+	chi_c = calc_chi_c(dx, dy);
 }

@@ -52,6 +52,8 @@ public:
 
 	double calc_chi_error(const double &chi, const double &chi_c);
 
+	double calc_chi_c(double dx, double dy);
+	
 	void pitch_damper(const std::array<double, 9>& X, std::array<double, 5>& U_r);
 
 	void phygoid_damper_theta_controller(const std::array<double, 9>& X, const double& theta_c, std::array<double, 5>& U_r);
@@ -69,4 +71,6 @@ public:
 	void chi_controller(const double& chi, std::array<double, 5>& U_r, const double& chi_c, double& phi_c);
 
 	void curve_coordination(const std::array<double, 9> &X, std::array<double, 5>& U_r);
+
+	void waypoint_control(const std::array<double, 3>& position, const std::array<double, 3>& way_point, double& chi);
 };

@@ -33,7 +33,9 @@ public:
 	double phi_c;
 	double chi_c = 0.0;
 	double theta_c;
-
+	std::array<double, 3> way_point;
+	double x_c;
+	double y_c;
 
 	//define parameters
 	//mass

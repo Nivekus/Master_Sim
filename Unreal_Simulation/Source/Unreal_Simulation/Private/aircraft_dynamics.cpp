@@ -354,6 +354,7 @@ void aircraft_dynamics::calc_controlled_step(const double &dt, double& pos_x, do
 	controller.pitch_damper(X,U_r);
 	controller.roll_damper(X,U_r);
 	controller.curve_coordination(X,U_r);
+	controller.waypoint_control(position, way_point, chi_c);
 	controller.chi_controller(chi,U_r,chi_c,phi_c);
 	controller.phi_controller(dt, X, phi_c, U_r);
 
