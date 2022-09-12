@@ -171,6 +171,9 @@ public:
 		void get_chi(double& chi_output);
 
 	UFUNCTION(BlueprintCallable)
+		void get_chi_c(double& chi_c_output);
+
+	UFUNCTION(BlueprintCallable)
 		void get_U(double& u1, double& u2, double& u3, double& u4, double& u5);
 
 };

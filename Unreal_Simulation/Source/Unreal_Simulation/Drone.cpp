@@ -262,3 +262,8 @@ void ADrone::set_waypoint(double x, double y, double z) {
 	dynamics.way_point[2] = z;
 }
 
+void ADrone::get_chi_c(double& chi_c_output) {
+	chi_c_output = dynamics.chi_c;
+};
+
+
