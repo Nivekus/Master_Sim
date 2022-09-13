@@ -41,10 +41,6 @@ void ADrone::BeginPlay()
 	//loads UE5 overwritten control parameters
 	set_control_values();
 	set_aircraft_parameters();
-
-
-	dynamics.way_point = { 1000,1000,0 };
-
 }
 
 // Called every frame
@@ -239,15 +235,15 @@ void ADrone::set_aircraft_parameters() {
 
 	std::array<std::array<double, 3>, 3> minv;
 	// inverse of matrix m
-	minv[0][0]= (m[1][1]* m[2][2]- m[2][1]* m[1][2]) * invdet;
-	minv[0][1]= (m[0][2]* m[2][1] - m[0][1]* m[2][2]) * invdet;
-	minv[0][2]= (m[0][1] * m[1][2] - m[0][2] * m[1][1]) * invdet;
-	minv[1][0]= (m[1][2] * m[2][0] - m[1][0] * m[2][2]) * invdet;
-	minv[1][1]= (m[0][0] * m[2][2] - m[0][2] * m[2][0]) * invdet;
-	minv[1][2]= (m[1][0] * m[0][2] - m[0][0] * m[1][2]) * invdet;
-	minv[2][0]= (m[1][0] * m[2][1] - m[2][0] * m[1][1]) * invdet;
-	minv[2][1]= (m[2][0] * m[0][1] - m[0][0] * m[2][1]) * invdet;
-	minv[2][2]= (m[0][0] * m[1][1] - m[1][0] * m[0][1]) * invdet;
+	minv[0][0] = (m[1][1] * m[2][2] - m[2][1] * m[1][2]) * invdet;
+	minv[0][1] = (m[0][2] * m[2][1] - m[0][1] * m[2][2]) * invdet;
+	minv[0][2] = (m[0][1] * m[1][2] - m[0][2] * m[1][1]) * invdet;
+	minv[1][0] = (m[1][2] * m[2][0] - m[1][0] * m[2][2]) * invdet;
+	minv[1][1] = (m[0][0] * m[2][2] - m[0][2] * m[2][0]) * invdet;
+	minv[1][2] = (m[1][0] * m[0][2] - m[0][0] * m[1][2]) * invdet;
+	minv[2][0] = (m[1][0] * m[2][1] - m[2][0] * m[1][1]) * invdet;
+	minv[2][1] = (m[2][0] * m[0][1] - m[0][0] * m[2][1]) * invdet;
+	minv[2][2] = (m[0][0] * m[1][1] - m[1][0] * m[0][1]) * invdet;
 
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {

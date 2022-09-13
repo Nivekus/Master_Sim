@@ -72,5 +72,5 @@ public:
 
 	void curve_coordination(const std::array<double, 9> &X, std::array<double, 5>& U_r);
 
-	void waypoint_control(const std::array<double, 3>& position, const std::array<double, 3>& way_point, double& chi);
+	void waypoint_control(const std::array<double, 3>& position, const std::array<double, 3>& way_point, double& chi, double& h_c);
 };

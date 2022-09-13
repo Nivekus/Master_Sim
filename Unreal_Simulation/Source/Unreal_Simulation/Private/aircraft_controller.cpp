@@ -39,7 +39,7 @@ void aircraft_controller::hight_controller(const double &h, std::array<double, 5
 	H_error = h_c - h;
 	theta_c = k_theta_H * H_error;
 	// limit max theta angle
-	theta_c = std::min(theta_c, 30 * M_PI / 180);
+	theta_c = std::min(theta_c, 10 * M_PI / 180);
 }
 
 void aircraft_controller::velocity_controller(const double& dt, const std::array<double, 9> &X, const double& v_c, std::array<double, 5>& U_r) {
@@ -77,15 +77,16 @@ double aircraft_controller::calc_chi_error(const double& chi, const double& chi_
 
 
 double aircraft_controller::calc_chi_c(double dx, double dy) {
-	double chi_c = atan2(dx, dy);
+	double chi_c = atan2(dy, dx);
 	return chi_c;
 }
 
 
-void aircraft_controller::waypoint_control(const std::array<double, 3>& position, const std::array<double, 3>& way_point, double& chi_c) {
+void aircraft_controller::waypoint_control(const std::array<double, 3>& position, const std::array<double, 3>& way_point, double& chi_c, double& h_c) {
 	double dx = way_point[0] - position[0];
 	double dy = way_point[1] - position[1];
 	chi_c = calc_chi_c(dx, dy);
+	h_c = way_point[2];
 }
 
 
