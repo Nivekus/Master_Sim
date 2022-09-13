@@ -11,6 +11,11 @@
  */
 class UNREAL_SIMULATION_API aircraft_controller
 {
+
+	double p_controller(const double& k, const double& error);
+	double pi_controller(const double& k, const double& r, const double& error, double& integral, const double& dt);
+
+public:
 	//aircraft control parameter
 	// damper longitudinal
 	double k_eta_q = 5;
@@ -42,15 +47,13 @@ class UNREAL_SIMULATION_API aircraft_controller
 	double velocity_integral = 0;
 
 
-	double p_controller(const double& k, const double& error);
-	double pi_controller(const double& k, const double& r, const double& error, double& integral, const double& dt);
-
-public:
 	aircraft_controller();
 	~aircraft_controller();
 
 	double calc_chi_error(const double &chi, const double &chi_c);
 
+	double calc_chi_c(double dx, double dy);
+	
 	void pitch_damper(const std::array<double, 9>& X, std::array<double, 5>& U_r);
 
 	void phygoid_damper_theta_controller(const std::array<double, 9>& X, const double& theta_c, std::array<double, 5>& U_r);
@@ -68,4 +71,6 @@ public:
 	void chi_controller(const double& chi, std::array<double, 5>& U_r, const double& chi_c, double& phi_c);
 
 	void curve_coordination(const std::array<double, 9> &X, std::array<double, 5>& U_r);
+
+	void waypoint_control(const std::array<double, 3>& position, const std::array<double, 3>& way_point, double& chi, double& h_c);
 };

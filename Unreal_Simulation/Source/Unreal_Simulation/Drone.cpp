@@ -28,7 +28,7 @@ void ADrone::BeginPlay()
 	tmp[2] = loc.Z / 100.0;
 	dynamics.set_position(tmp);
 	FRotator rot = GetActorRotation();
-	tmp[0]  = FMath::DegreesToRadians(rot.Roll);
+	tmp[0] = FMath::DegreesToRadians(rot.Roll);
 	tmp[1] = FMath::DegreesToRadians(rot.Pitch);
 	tmp[2] = FMath::DegreesToRadians(rot.Yaw);
 	dynamics.set_orientation(tmp);
@@ -37,6 +37,10 @@ void ADrone::BeginPlay()
 	dynamics.v_c = std::sqrt( dynamics.X[0] * dynamics.X[0] 
 							+ dynamics.X[1] * dynamics.X[1] 
 							+ dynamics.X[2] * dynamics.X[2]);
+
+	//loads UE5 overwritten control parameters
+	set_control_values();
+	set_aircraft_parameters();
 }
 
 // Called every frame
@@ -149,10 +153,113 @@ void ADrone::set_phi_c(double phi) {
 	dynamics.phi_c = phi;
 }
 
-void ADrone::set_k_zeta_r(double k, double t) {
-	double k_zeta_r = k;
-	double T = t;
+void ADrone::set_control_values() {
+	dynamics.controller.k_eta_q = k_eta_q;
+	dynamics.controller.k_xi_p = k_xi_p;
+	dynamics.controller.k_eta_theta = k_eta_theta;
+	dynamics.controller.k_theta_H = k_theta_H;
+	dynamics.controller.r_f_V = r_f_V;
+	dynamics.controller.k_f_V = k_f_V;
+	dynamics.controller.k_xi_phi = k_xi_phi;
+	dynamics.controller.i_xi_phi = i_xi_phi;
+	dynamics.controller.k_phi_chi = k_phi_chi;
+	dynamics.controller.k_zeta_beta = k_zeta_beta;
 }
-void ADrone::set_k_xi_p(double k) {
-	double k_xi_p = k;
+
+void ADrone::set_aircraft_parameters() {
+	dynamics.m = mass;
+	dynamics.g = gravity;
+	dynamics.x_apt1 = engine_1[0];
+	dynamics.y_apt1 = engine_1[1];
+	dynamics.z_apt1 = engine_1[2];
+	
+	dynamics.x_apt2 = engine_2[0];
+	dynamics.y_apt2 = engine_2[1];
+	dynamics.z_apt2 = engine_2[2];
+
+	dynamics.S = S;
+	dynamics.St = St;
+
+	dynamics.l = l;
+	dynamics.lt = lt;
+
+	dynamics.x_cg = center_of_gravity[0];
+	dynamics.y_cg = center_of_gravity[1];
+	dynamics.z_cg = center_of_gravity[2];
+
+	dynamics.x_ac = center_of_lift[0];
+	dynamics.y_ac = center_of_lift[1];
+	dynamics.z_ac = center_of_lift[2];
+
+	dynamics.rho = rho;
+	dynamics.depsda = depsda;
+	dynamics.alpha_L0 = alpha_L0;
+	dynamics.alpha_switch = alpha_switch;
+	dynamics.a0 = a0;
+	dynamics.a1 = a1;
+	dynamics.a2 = a2;
+	dynamics.a3 = a3;
+	dynamics.n = n;
+
+	dynamics.u1min = cont_aileron[0];
+	dynamics.u2min = cont_elevator[0];
+	dynamics.u3min = cont_rudder[0];
+	dynamics.u4min = cont_engine1[0];
+	dynamics.u5min = cont_engine2[0];
+
+	dynamics.u1max = cont_aileron[1];
+	dynamics.u2max = cont_elevator[1];
+	dynamics.u3max = cont_rudder[1];
+	dynamics.u4max = cont_engine1[1];
+	dynamics.u5max = cont_engine2[1];
+
+	dynamics.Ib[0][0] = Ix;
+	dynamics.Ib[1][1] = Iy;
+	dynamics.Ib[2][2] = Iz;
+	dynamics.Ib[0][2] = - Ixz;
+	dynamics.Ib[2][0] = - Ixz;
+
+	std::array<std::array<double, 3>, 3> m;
+
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			m[i][j] = dynamics.Ib[i][j];
+		}
+	}
+
+	// = dynamics.Ib;
+	// computes the inverse of a matrix m
+	double det = m[0][0] * (m[1][1] * m[2][2] - m[2][1] * m[1][2]) - m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0]) + m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]);
+
+	double invdet = 1 / det;
+
+	std::array<std::array<double, 3>, 3> minv;
+	// inverse of matrix m
+	minv[0][0] = (m[1][1] * m[2][2] - m[2][1] * m[1][2]) * invdet;
+	minv[0][1] = (m[0][2] * m[2][1] - m[0][1] * m[2][2]) * invdet;
+	minv[0][2] = (m[0][1] * m[1][2] - m[0][2] * m[1][1]) * invdet;
+	minv[1][0] = (m[1][2] * m[2][0] - m[1][0] * m[2][2]) * invdet;
+	minv[1][1] = (m[0][0] * m[2][2] - m[0][2] * m[2][0]) * invdet;
+	minv[1][2] = (m[1][0] * m[0][2] - m[0][0] * m[1][2]) * invdet;
+	minv[2][0] = (m[1][0] * m[2][1] - m[2][0] * m[1][1]) * invdet;
+	minv[2][1] = (m[2][0] * m[0][1] - m[0][0] * m[2][1]) * invdet;
+	minv[2][2] = (m[0][0] * m[1][1] - m[1][0] * m[0][1]) * invdet;
+
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			dynamics.inv_Ib[i][j] = minv[i][j];
+		}
+	}
+}
+
+void ADrone::set_waypoint(double x, double y, double z) {
+	dynamics.way_point[0] = x;
+	dynamics.way_point[1] = y;
+	dynamics.way_point[2] = z;
+}
+
+void ADrone::get_chi_c(double& chi_c_output) {
+	chi_c_output = dynamics.chi_c;
 };
+
+
