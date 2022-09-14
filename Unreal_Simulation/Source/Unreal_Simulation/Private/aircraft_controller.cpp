@@ -30,8 +30,10 @@ void aircraft_controller::roll_damper(const std::array<double, 9>& X, std::array
 	U_r[0] += p_controller(k_xi_p,X[3]);
 }
 
-void aircraft_controller::phygoid_damper_theta_controller(const std::array<double, 9>& X,const double& theta_c, std::array<double, 5>& U_r) {
-	U_r[1] += p_controller(k_eta_theta,(X[7] - theta_c));
+void aircraft_controller::phygoid_damper_theta_controller(const double& dt, const std::array<double, 9>& X,const double& theta_c, std::array<double, 5>& U_r) {
+	//U_r[1] += p_controller(k_eta_theta,(X[7] - theta_c));
+	U_r[1] += pi_controller(k_eta_theta,i_eta_theta,(X[7] - theta_c),theta_integral,dt);
+
 }
 
 void aircraft_controller::hight_controller(const double &h, std::array<double, 5>& U_r, const double &h_c,double &theta_c) {

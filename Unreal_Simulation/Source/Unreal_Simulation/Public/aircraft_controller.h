@@ -19,7 +19,8 @@ public:
 	//aircraft control parameter
 	// damper longitudinal
 	double k_eta_q = 5;
-	double k_eta_theta = 20;
+	double k_eta_theta = 10;
+	double i_eta_theta = 0.1;
 	// damper lateral
 	double k_zeta_r = 15;
 	double T = 0.1;
@@ -45,7 +46,7 @@ public:
 
 	double phi_integral = 0;
 	double velocity_integral = 0;
-
+	double theta_integral = 0;
 
 	aircraft_controller();
 	~aircraft_controller();
@@ -56,7 +57,7 @@ public:
 	
 	void pitch_damper(const std::array<double, 9>& X, std::array<double, 5>& U_r);
 
-	void phygoid_damper_theta_controller(const std::array<double, 9>& X, const double& theta_c, std::array<double, 5>& U_r);
+	void phygoid_damper_theta_controller(const double& dt, const std::array<double, 9>& X, const double& theta_c, std::array<double, 5>& U_r);
 
 	void yaw_damper(const double &dt, const std::array<double, 9>& X, std::array<double, 5>& U_r);
 

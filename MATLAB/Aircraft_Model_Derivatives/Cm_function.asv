@@ -1,0 +1,13 @@
+
+function Cm = Cm_function()
+eta21 = -0.59-3.1* ((St*lt)/(S*cbar))*(alpha-epsilon)-4.03*((St*lt^2)/(S*cbar^2));
+
+dCMdx = (cbar/Va) *[   -11 0 5 ;
+            0  -4.03*((St*lt^2)/(S*cbar^2)) 0;
+            1.7 0 -11.5];
+
+dCMdu = [-0.6 0 0.22;
+          0 -3.1*((St*lt)/(S*cbar)) 0 ;
+          0 0 -0.63];
+    CMac_b = eta + dCMdx *wbe_b + dCMdu * [u1;u2;u3];
+end

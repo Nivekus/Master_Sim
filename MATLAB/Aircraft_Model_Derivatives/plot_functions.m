@@ -1,0 +1,34 @@
+close all;
+
+
+alpha = linspace(-10,25,100);
+for i = 1:100
+    CA(i) = CA_function(alpha(i),0,0,85);
+end
+
+LiftCessna = readmatrix("Cessna_model_Parameters/Lift_Cessna.txt");
+figure;
+plot(alpha,CA);
+xlabel("alpha in [deg]");
+ylabel("CA");
+hold on;
+plot(LiftCessna(5:38,1),LiftCessna(5:38,2))
+
+
+figure;
+fplot(@(beta) CY_function(beta,0),[-10,10]);
+xlabel("beta in [deg]");
+ylabel("CY");
+
+
+DragCessna = readmatrix("Cessna_model_Parameters/Drag_Cessna.txt");
+figure;
+fplot(@(alpha) CD_function(alpha)-0.08,[-80,60]);
+xlabel("alpha in [deg]");
+ylabel("CD");
+hold on
+plot(DragCessna(5:38,1),DragCessna(5:38,2));
+
+
+
+
